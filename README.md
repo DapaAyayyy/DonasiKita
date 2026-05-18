@@ -167,27 +167,6 @@ Alur demo minimal yang harus bisa berjalan:
 11. Donatur melihat riwayat donasi
 ```
 
----
-
-## Akun Dummy
-
-Isi bagian ini jika akun dummy sudah tersedia.
-
-### Admin
-
-```txt
-Email    : admin@example.com
-Password : password
-```
-
-### Donatur
-
-```txt
-Email    : donatur@example.com
-Password : password
-```
-
-> Catatan: Sesuaikan akun dummy dengan data yang ada di database masing-masing.
 
 ---
 

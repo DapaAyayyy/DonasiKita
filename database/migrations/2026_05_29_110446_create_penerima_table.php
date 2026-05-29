@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('penerima', function (Blueprint $table) {
-            $table->id();
+            // Ubah id() menjadi custom primary key agar sesuai dengan Model[cite: 4, 5]
+            $table->id('id_penerima'); 
+            
+            // Tambahkan kolom data penerima dasar untuk Increment 1
+            $table->string('nama');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

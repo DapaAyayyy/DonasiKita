@@ -72,4 +72,37 @@ class AuthController extends Controller
         
         return redirect('/');
     }
+
+    // 3. Proses Logout
+    public function logout(Request $request)
+    {
+        // Hapus semua data session
+        $request->session()->flush();
+        
+        return redirect('/');
+    }
+
+    // --- TARUH METHOD TUGASMU DI SINI ---
+
+    public function showRegister()
+    {
+        return view('auth.register'); 
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:donatur,email', 
+            'password' => 'required|min:6' 
+        ]);
+
+        Donatur::create([
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'password_hash' => Hash::make($request->password), 
+        ]);
+
+        return redirect('/login')->with('success', 'Registrasi berhasil, silakan login.');
+    }
 }

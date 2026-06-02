@@ -1,63 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>DonasiKita - Kebaikan Dimulai Dari Sini</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "secondary-container": "#9e41f5", "surface-container-lowest": "#ffffff", "primary": "#3525cd", "surface-container-highest": "#d3e4fe", "primary-fixed-dim": "#c3c0ff", "tertiary-container": "#006a7c", "surface-dim": "#cbdbf5", "outline-variant": "#c7c4d8", "surface": "#f8f9ff", "on-secondary-fixed": "#2c0051", "tertiary-fixed-dim": "#4cd7f6", "primary-container": "#4f46e5", "on-primary-fixed": "#0f0069", "surface-container": "#e5eeff", "background": "#f8f9ff", "on-error": "#ffffff", "on-tertiary": "#ffffff", "secondary": "#831ada", "secondary-fixed-dim": "#ddb8ff", "on-error-container": "#93000a", "surface-variant": "#d3e4fe", "tertiary": "#00505f", "inverse-primary": "#c3c0ff", "error-container": "#ffdad6", "on-tertiary-fixed": "#001f26", "surface-container-low": "#eff4ff", "primary-fixed": "#e2dfff", "on-surface-variant": "#464555", "on-tertiary-container": "#93e8ff", "on-secondary-fixed-variant": "#6800b4", "error": "#ba1a1a", "tertiary-fixed": "#acedff", "outline": "#777587", "secondary-fixed": "#f0dbff", "on-primary-container": "#dad7ff", "inverse-surface": "#213145", "surface-tint": "#4d44e3", "surface-container-high": "#dce9ff", "on-tertiary-fixed-variant": "#004e5c", "surface-bright": "#f8f9ff", "on-surface": "#0b1c30", "on-secondary-container": "#fffbff", "on-background": "#0b1c30", "on-primary": "#ffffff", "on-secondary": "#ffffff", "inverse-on-surface": "#eaf1ff", "on-primary-fixed-variant": "#3323cc"
-                    },
-                    "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1.5rem", "full": "9999px" },
-                    "spacing": { "lg": "48px", "gutter": "24px", "base": "8px", "md": "24px", "xs": "4px", "container-max": "1280px", "sm": "12px", "xl": "80px" },
-                    "fontFamily": { "body-md": ["Inter"], "caption": ["Inter"], "headline-lg-mobile": ["Plus Jakarta Sans"], "label-md": ["Inter"], "display-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-lg": ["Inter"] },
-                    "fontSize": { "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }], "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }], "headline-lg-mobile": ["28px", { "lineHeight": "1.3", "fontWeight": "700" }], "label-md": ["14px", { "lineHeight": "1.4", "fontWeight": "600" }], "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }], "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }], "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }], "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }] },
-                    "boxShadow": { 'soft-1': '0 4px 20px rgba(0, 0, 0, 0.05)', 'soft-2': '0 10px 30px rgba(0, 0, 0, 0.08)' }
-                }
-            }
-        }
-    </script>
-    <style>
-        .gradient-text { background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .bg-hero-gradient { background: linear-gradient(135deg, #3525cd 0%, #831ada 100%); }
-        .bg-progress-gradient { background: linear-gradient(90deg, #4CD7F6 0%, #3525CD 100%); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    </style>
-</head>
-<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden">
-    
-    <!-- TopNavBar -->
-    <nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-300 ease-in-out">
-        <div class="flex justify-between items-center px-lg py-md max-w-container-max mx-auto">
-            <a href="/" class="flex items-center cursor-pointer group"><img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCriGjghrZeaygIgsruJgs-iHEc6uYuB9Jun2_n3z-9qdBJoBJb0po_s2U1wA2CLjl1ny33iYQxpQiGQKSe-pQ-xYtcvAd4yrLpc6dj1KC9QKGPs1nBYEYB5mYBVHoi-XzpmgHMtXShD4PWHJpQlYr7hC0sXmT2eIGVC6URUq-3lvkR6GHFByTP-DfK-O_DXjvXqbtysuOGoaoOEaUSyG270E5Y4ZXs0ah8FbOTT_jyPUIuHYbp1L4HGDMwo3KPpRo32Q7rtQewtAlP"></a>
-            <div class="hidden md:flex items-center gap-lg">
-                <a class="flex items-center gap-xs text-primary font-bold border-b-2 border-[#84cc16] pb-1" href="/">
-                    <span class="material-symbols-outlined fill">home</span>
-                    <span class="font-label-md text-label-md">Beranda</span>
-                </a>
-                <a class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors pb-1" href="#">
-                    <span class="material-symbols-outlined">emoji_events</span>
-                    <span class="font-label-md text-label-md">Leaderboard</span>
-                </a>
-            </div>
-            <div class="flex items-center gap-sm">
-                <button class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">Login</button>
-                <button class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary"><span class="material-symbols-outlined">person_add</span>Daftar</button>
-            </div>
-        </div>
-    </nav>
+@extends('layouts.app') 
 
-    <!-- Hero Section -->
+@section('title', 'DonasiKita - Kebaikan Dimulai Dari Sini')
+
+@section('content')
     <section class="relative pt-[120px] pb-xl lg:pt-[160px] lg:pb-[120px] bg-hero-gradient overflow-hidden">
         <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 24px 24px;"></div>
         <div class="max-w-container-max mx-auto px-gutter relative z-10 flex flex-col items-center text-center">
@@ -81,7 +26,6 @@
         </div>
     </section>
 
-    <!-- Stats Section (Angka Dinamis) -->
     <section class="max-w-container-max mx-auto px-gutter -mt-xl relative z-20 mb-xl">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter bg-surface-container-lowest rounded-2xl shadow-soft-2 p-lg">
             <div class="flex flex-col items-center text-center p-md group">
@@ -108,7 +52,6 @@
         </div>
     </section>
 
-    <!-- Campaign Section -->
     <section class="max-w-container-max mx-auto px-gutter mb-xl">
         <div class="flex flex-col items-center text-center mb-lg">
             <h2 class="font-display-lg text-headline-lg text-on-surface mb-xs">Kampanye Pilihan</h2>
@@ -129,10 +72,8 @@
             </form>
         </div>
 
-        <!-- Grid (Looping Dinamis Database) -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
             
-            {{-- Menggunakan @forelse untuk menampilkan data dinamis dari Controller --}}
             @forelse($kampanyes ?? [] as $kampanye)
                 @php
                     $target = $kampanye->target_donasi ?? 0;
@@ -140,14 +81,11 @@
                     $progress = $target > 0 ? min(($terkumpul / $target) * 100, 100) : 0;
                 @endphp
 
-                <!-- Card Dinamis -->
                 <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 hover:shadow-soft-2 transition-shadow overflow-hidden flex flex-col group">
                     <div class="relative h-48 overflow-hidden">
-                        {{-- Logika penampilan gambar jika ada, dan placeholder jika kosong --}}
                         <img alt="{{ $kampanye->judul ?? 'Kampanye' }}" 
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                             src="{{ !empty($kampanye->foto_sampul) ? asset('assets/images/' . $kampanye->foto_sampul) : 'https://placehold.co/600x400?text=Belum+Ada+Sampul' }}">
-                        {{-- Logika Status Mendesak --}}
                         @if(($kampanye->status ?? '') === 'mendesak')
                             <div class="absolute top-sm right-sm px-sm py-xs text-white font-label-md text-label-md text-[12px] rounded-full shadow-sm flex items-center gap-xs bg-primary">
                                 <span class="material-symbols-outlined text-[16px]">warning</span> Mendesak
@@ -178,7 +116,6 @@
                     </div>
                 </div>
             @empty
-                {{-- Tampilan Jika Database Kampanye Masih Kosong --}}
                 <div class="col-span-1 md:col-span-2 xl:col-span-3 flex flex-col items-center justify-center py-xl text-outline-variant">
                     <span class="material-symbols-outlined text-[64px] mb-sm">inventory_2</span>
                     <p class="font-body-md text-body-md text-center">Belum ada kampanye yang tersedia saat ini.</p>
@@ -192,26 +129,4 @@
             </a>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="w-full mt-lg bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/20">
-        <div class="flex flex-col md:flex-row justify-between items-center px-lg py-xl max-w-container-max mx-auto gap-md">
-            <div class="flex flex-col items-center md:items-start gap-xs">
-                <div class="flex items-center opacity-80 hover:opacity-100 transition-opacity"><img alt="DonasiKita Logo" class="h-[40px] mb-2 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCriGjghrZeaygIgsruJgs-iHEc6uYuB9Jun2_n3z-9qdBJoBJb0po_s2U1wA2CLjl1ny33iYQxpQiGQKSe-pQ-xYtcvAd4yrLpc6dj1KC9QKGPs1nBYEYB5mYBVHoi-XzpmgHMtXShD4PWHJpQlYr7hC0sXmT2eIGVC6URUq-3lvkR6GHFByTP-DfK-O_DXjvXqbtysuOGoaoOEaUSyG270E5Y4ZXs0ah8FbOTT_jyPUIuHYbp1L4HGDMwo3KPpRo32Q7rtQewtAlP"></div>
-                <p class="font-caption text-caption text-on-surface-variant dark:text-on-surface-variant text-center md:text-left mt-sm">
-                    © 2067 DonasiKita. Kebaikan Dimulai Dari Sini.
-                </p>
-                <p class="font-caption text-caption text-on-surface-variant/70 text-center md:text-left">
-                    Dibuat dengan semangat untuk Projek Akhir RPL (｡・ω・｡)
-                </p>
-            </div>
-            <div class="flex flex-wrap justify-center gap-md md:gap-lg font-body-md text-body-md">
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Tentang Kami</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Hubungi Kami</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Kebijakan Privasi</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Syarat &amp; Ketentuan</a>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+@endsection

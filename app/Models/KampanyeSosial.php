@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Pengelola;
 use App\Models\Penerima;
@@ -9,7 +10,9 @@ use App\Models\Donasi;
 use App\Models\Laporan;
 
 class KampanyeSosial extends Model
-{
+{   
+    use HasFactory;
+    
     protected $table = 'kampanye_sosial';
     protected $primaryKey = 'id_kampanye';
 

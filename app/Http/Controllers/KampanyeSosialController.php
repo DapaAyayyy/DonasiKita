@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donatur;
 use App\Models\KampanyeSosial;
 use Illuminate\Http\Request;
 
 class KampanyeSosialController extends Controller
 {
     // Method untuk Landing Page (Route: /)
+// Method untuk Landing Page (Route: /)
     public function home()
     {
         $kampanye = KampanyeSosial::with('penerima')
@@ -15,7 +17,13 @@ class KampanyeSosialController extends Controller
             ->take(3)
             ->get();
 
-        return view('home', compact('kampanye'));
+        // 2. Ambil data statistik untuk angka di bagian atas halaman
+        $totalKampanye = KampanyeSosial::count();
+        $totalDana = KampanyeSosial::sum('terkumpul');
+        $totalDonatur = Donatur::count(); // Pastikan Anda sudah meng-import model Donatur di atas file controller
+
+        // 3. Lempar variabel ke view 'index'
+        return view('index', compact('kampanyes', 'totalKampanye', 'totalDana', 'totalDonatur'));
     }
 
     // Sesuai screenshot PM (Route: /kampanye)

@@ -45,7 +45,7 @@
         <div class="flex justify-between items-center px-lg py-md max-w-container-max mx-auto">
             <a href="/" class="flex items-center cursor-pointer group">
                 <img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" 
-                    src="{{ asset('assets/icons/donasikitaicon.png') }}"
+                    src="{{ asset('assets/icons/donasikitaicon.png') }}">
             </a>            
                 <div class="hidden md:flex items-center gap-lg">
                     <a class="flex items-center gap-xs {{ request()->is('/') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/">
@@ -79,7 +79,7 @@
             <div class="flex flex-col items-center md:items-start gap-xs">
                 <a href="/" class="flex items-center cursor-pointer group">
                     <img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" 
-                        src="{{ asset('assets/icons/donasikitaicon.png') }}"
+                        src="{{ asset('assets/icons/donasikitaicon.png') }}">
                 </a>
                 <p class="font-caption text-caption text-on-surface-variant dark:text-on-surface-variant text-center md:text-left mt-sm">
                     © 2026 DonasiKita. Kebaikan Dimulai Dari Sini.

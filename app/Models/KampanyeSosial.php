@@ -44,4 +44,9 @@ class KampanyeSosial extends Model
     {
         return $this->hasMany(Laporan::class, 'id_kampanye', 'id_kampanye');
     }
+
+    public function kampanyeSosial()
+    {
+    return $this->belongsTo(KampanyeSosial::class, 'id_kampanye', 'id_kampanye');
+    }
 }

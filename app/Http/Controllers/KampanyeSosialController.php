@@ -10,32 +10,28 @@ class KampanyeSosialController extends Controller
     // Method untuk Landing Page (Route: /)
     public function home()
     {
-        // Query kampanye terbaru dengan relasi penerima[cite: 1]
         $kampanye = KampanyeSosial::with('penerima')
-            ->latest()
-            ->take(3) // Mengambil 3 kampanye terbaru untuk landing page
+            ->orderBy('tanggal_dibuat', 'desc')
+            ->take(3)
             ->get();
 
         return view('home', compact('kampanye'));
     }
 
-    // Method untuk Daftar Kampanye (Route: /kampanye)
+    // Sesuai screenshot PM (Route: /kampanye)
     public function index()
     {
-        // Query semua kampanye dengan relasi penerima[cite: 1]
         $kampanye = KampanyeSosial::with('penerima')
-            ->latest()
+            ->orderBy('tanggal_dibuat', 'desc')
             ->get();
 
         return view('kampanye.index', compact('kampanye'));
     }
 
-    // Method untuk Detail Kampanye (Route: /kampanye/{id})
+    // Route: /kampanye/{id}
     public function show($id)
     {
-        // Query detail kampanye dengan relasi penerima dan donasi[cite: 1]
-        // Kita menggunakan find() agar jika kosong, Backend 2 bisa membuat logika penanganan errornya[cite: 1]
-        $kampanye = KampanyeSosial::with(['penerima', 'donasi'])->find($id);
+        $kampanye = KampanyeSosial::with(['penerima', 'donasi'])->findOrFail($id);
 
         return view('kampanye.show', compact('kampanye'));
     }

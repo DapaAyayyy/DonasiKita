@@ -10,9 +10,14 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+    
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias([
+        'donatur' => \App\Http\Middleware\CheckDonatur::class,
+        'pengelola' => \App\Http\Middleware\CheckPengelola::class,
+    ]);
     })
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -15,6 +15,15 @@ class CheckPengelola
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (
+            ! $request->session()->has('auth_id') ||
+            $request->session()->get('auth_type') !== 'pengelola'
+        ) {
+            return redirect('/login')->withErrors([
+                'auth' => 'Silakan login sebagai pengelola terlebih dahulu.',
+            ]);
+        }
+
         return $next($request);
     }
 }

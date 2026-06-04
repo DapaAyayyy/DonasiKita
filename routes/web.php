@@ -29,7 +29,6 @@ Route::get('/pengelola/dashboard', function () {
     return 'Dashboard Pengelola';
 })->middleware('pengelola');
 // Route untuk Detail Kampanye
-Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
 
 Route::get('/tentang-kami', function () {
     return view('tentang-kami');

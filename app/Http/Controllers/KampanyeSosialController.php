@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 
 class KampanyeSosialController extends Controller
 {
-    // Method untuk Landing Page (Route: /)
+
 // Method untuk Landing Page (Route: /)
     public function home()
     {
-        $kampanye = KampanyeSosial::with('penerima')
-            ->orderBy('tanggal_dibuat', 'desc')
-            ->take(3)
+        $kampanyes = KampanyeSosial::with('penerima')
+            ->orderBy('id_kampanye', 'desc')
+            ->take(6)
             ->get();
 
         // 2. Ambil data statistik untuk angka di bagian atas halaman
@@ -26,7 +26,7 @@ class KampanyeSosialController extends Controller
         return view('index', compact('kampanyes', 'totalKampanye', 'totalDana', 'totalDonatur'));
     }
 
-    // Sesuai screenshot PM (Route: /kampanye)
+    // Method untuk Daftar Kampanye (Route: /kampanye)
     public function index()
     {
         $kampanye = KampanyeSosial::with('penerima')

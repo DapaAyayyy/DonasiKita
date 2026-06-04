@@ -12,10 +12,9 @@ class KampanyeSosialController extends Controller
 // Method untuk Landing Page (Route: /)
     public function home()
     {
-        // 1. Ambil 6 kampanye terbaru untuk ditampilkan di card
-        $kampanyes = KampanyeSosial::with('penerima')
-            ->orderBy('id_kampanye', 'desc')
-            ->take(6)
+        $kampanye = KampanyeSosial::with('penerima')
+            ->orderBy('tanggal_dibuat', 'desc')
+            ->take(3)
             ->get();
 
         // 2. Ambil data statistik untuk angka di bagian atas halaman
@@ -27,10 +26,9 @@ class KampanyeSosialController extends Controller
         return view('index', compact('kampanyes', 'totalKampanye', 'totalDana', 'totalDonatur'));
     }
 
-    // Method untuk Daftar Kampanye (Route: /kampanye)
+    // Sesuai screenshot PM (Route: /kampanye)
     public function index()
     {
-        // Query semua kampanye dengan relasi penerima[cite: 1]
         $kampanye = KampanyeSosial::with('penerima')
             ->orderBy('tanggal_dibuat', 'desc')
             ->get();
@@ -38,12 +36,10 @@ class KampanyeSosialController extends Controller
         return view('kampanye.index', compact('kampanye'));
     }
 
-    // Method untuk Detail Kampanye (Route: /kampanye/{id})
+    // Route: /kampanye/{id}
     public function show($id)
     {
-        // Query detail kampanye dengan relasi penerima dan donasi[cite: 1]
-        // Kita menggunakan find() agar jika kosong, Backend 2 bisa membuat logika penanganan errornya[cite: 1]
-        $kampanye = KampanyeSosial::with(['penerima', 'donasi'])->find($id);
+        $kampanye = KampanyeSosial::with(['penerima', 'donasi'])->findOrFail($id);
 
         return view('kampanye.show', compact('kampanye'));
     }

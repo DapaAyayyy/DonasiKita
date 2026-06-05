@@ -29,7 +29,7 @@ class AuthController extends Controller
         $donatur = Donatur::where('email', $request->email)->first();
 
         // Pengecekan menggunakan Hash::check sesuai instruksi Increment 2
-        if ($donatur && Hash::check($request->password, $donatur->password_hash)) {
+          if ($donatur && $this->passwordMatches($request->password, $donatur->password_hash, $donatur)) {
             $request->session()->regenerate();
 
             // Simpan Session Donatur
@@ -39,14 +39,14 @@ class AuthController extends Controller
                 'auth_name' => $donatur->nama,
             ]);
 
-            return redirect('/donatur/dashboard');
+            return redirect()->intended('/kampanye');
         }
 
         // SKENARIO B: Cek Login Pengelola
 
         $pengelola = Pengelola::where('email', $request->email)->first();
 
-        if ($pengelola && Hash::check($request->password, $pengelola->password_hash)) {
+          if ($pengelola && $this->passwordMatches($request->password, $pengelola->password_hash, $pengelola)) {
             $request->session()->regenerate();
 
             // Simpan Session Pengelola
@@ -57,7 +57,7 @@ class AuthController extends Controller
                 'auth_role' => $pengelola->role,
             ]);
 
-            return redirect('/pengelola/dashboard');
+            return redirect()->intended('/pengelola/dashboard');
         }
 
         // JIKA GAGAL LOGIN
@@ -97,4 +97,25 @@ class AuthController extends Controller
 
         return redirect('/login')->with('success', 'Registrasi berhasil, silakan login.');
     }
+      private function passwordMatches(string $password, ?string $storedPassword, $user): bool
+  {
+      if (empty($storedPassword)) {
+          return false;
+      }
+
+      $hashInfo = password_get_info($storedPassword);
+
+      if (($hashInfo['algoName'] ?? 'unknown') === 'bcrypt') {
+          return Hash::check($password, $storedPassword);
+      }
+
+      // Fallback sementara untuk data lama/manual yang password-nya belum di-hash.
+      // Setelah berhasil login, password langsung di-upgrade menjadi bcrypt.
+      if (hash_equals($storedPassword, $password)) {
+          $user->password_hash = Hash::make($password);
+          return true;
+      }
+
+      return false;
+  }
 }

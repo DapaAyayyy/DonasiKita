@@ -109,7 +109,7 @@
                                     <span class="material-symbols-outlined text-[16px]">track_changes</span> Target: Rp {{ number_format($target, 0, ',', '.') }}
                                 </div>
                             </div>
-                            <a href="/kampanye/{{ $kampanye->id ?? '#' }}" class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
+                            <a href="/kampanye/{{ $kampanye->id_kampanye ?? '#' }}" class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
                                 <span class="material-symbols-outlined fill text-[18px]">favorite</span> Donasi Sekarang
                             </a>
                         </div>

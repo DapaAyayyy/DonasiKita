@@ -18,7 +18,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Sementara (Diberi Middleware)
 Route::get('/donatur/dashboard', function () {
@@ -29,6 +29,11 @@ Route::get('/pengelola/dashboard', function () {
     return 'Dashboard Pengelola';
 })->middleware('pengelola');
 // Route untuk Detail Kampanye
-Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
 
-Route::get('/login', function () {return view('auth.login');});
+Route::get('/tentang-kami', function () {
+    return view('tentang-kami');
+});
+
+Route::get('/hubungi-kami', function () {
+    return view('hubungi-kami');
+});

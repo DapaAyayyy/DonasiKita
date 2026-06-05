@@ -60,7 +60,7 @@
                         <div class="w-full h-2 bg-surface-container-high rounded-full mb-md overflow-hidden">
                             <div class="h-full bg-progress-gradient rounded-full" style="width: {{ $progress }}%;"></div>
                         </div>
-                        <a href="/kampanye/{{ $item->id }}"
+                        <a href="/kampanye/{{ $item->id_kampanye }}"
                            class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
                             <span class="material-symbols-outlined fill text-[18px]">favorite</span> Donasi Sekarang
                         </a>

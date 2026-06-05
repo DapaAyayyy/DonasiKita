@@ -41,6 +41,6 @@ class KampanyeSosialController extends Controller
     {
         $kampanye = KampanyeSosial::with(['penerima', 'donasi'])->findOrFail($id);
 
-        return view('kampanye.show', compact('kampanye'));
+        return view('kampanye.show', ['detail' => $kampanye]);
     }
 }

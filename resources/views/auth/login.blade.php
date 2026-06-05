@@ -101,7 +101,7 @@
             </form>
 
             <div class="mt-8 text-center text-sm text-gray-500">
-                Belum punya akun? <a href="#" class="text-[#0B132A] font-semibold hover:underline">Daftar sebagai Donatur</a>
+                Belum punya akun? <a href="/register" class="text-[#0B132A] font-semibold hover:underline">Daftar sebagai Donatur</a>
             </div>
         </div>
     </div>

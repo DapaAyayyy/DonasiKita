@@ -11,3 +11,5 @@ Route::get('/kampanye', [KampanyeSosialController::class, 'index']);
 
 // Route untuk Detail Kampanye
 Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
+
+Route::get('/login', function () {return view('auth.login');});

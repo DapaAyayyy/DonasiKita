@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampanyeSosialController;
 use App\Http\Controllers\AuthController; 
-
+use App\Http\Controllers\RiwayatController;
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
@@ -38,3 +38,8 @@ Route::get('/tentang-kami', function () {
 Route::get('/hubungi-kami', function () {
     return view('hubungi-kami');
 });
+
+
+// ROUTE INCREMENT 4 (Riwayat & Leaderboard)
+// Area Donatur
+Route::get('/riwayat-donasi', [RiwayatController::class, 'index'])->name('donatur.riwayat');

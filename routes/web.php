@@ -4,11 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampanyeSosialController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LeaderboardController; // Tambahan Increment 4
+use App\Http\Controllers\DonasiController;
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
 Route::get('/kampanye', [KampanyeSosialController::class, 'index']);
 Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
+Route::post('/kampanye/{id}/donasi', [DonasiController::class, 'store'])
+    ->middleware('donatur')
+    ->name('donasi.store');
 
 
 // ROUTE INCREMENT 2 (Auth Donatur & Pengelola)
@@ -28,6 +32,11 @@ Route::get('/donatur/dashboard', function () {
 Route::get('/pengelola/dashboard', function () {
     return 'Dashboard Pengelola';
 })->middleware('pengelola');
+
+
+//Midtrans route
+Route::post('/midtrans/callback', [DonasiController::class, 'callback'])
+      ->name('midtrans.callback');
 
 
 // ROUTE INCREMENT 4 (Publik)

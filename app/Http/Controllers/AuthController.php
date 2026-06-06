@@ -67,9 +67,11 @@ class AuthController extends Controller
     // 3. Proses Logout
     public function logout(Request $request)
     {
-        // Hapus semua data session dan token lama
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
 
     // 4. Showregister dan Register
 

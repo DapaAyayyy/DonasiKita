@@ -73,16 +73,7 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    // 3. Proses Logout
-    public function logout(Request $request)
-    {
-        // Hapus semua data session
-        $request->session()->flush();
-        
-        return redirect('/');
-    }
-
-    // --- TARUH METHOD TUGASMU DI SINI ---
+    // 4. Showregister dan Register
 
     public function showRegister()
     {

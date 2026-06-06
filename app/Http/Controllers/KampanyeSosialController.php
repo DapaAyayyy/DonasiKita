@@ -22,7 +22,7 @@ class KampanyeSosialController extends Controller
         $totalDonatur = Donatur::count(); // Pastikan Anda sudah meng-import model Donatur di atas file controller
 
         // 3. Lempar variabel ke view 'index'
-        return view('index', compact('kampanye', 'totalKampanye', 'totalDana', 'totalDonatur'));
+        return view('index', compact('kampanyes', 'totalKampanye', 'totalDana', 'totalDonatur'));
     }
 
     // Method untuk Daftar Kampanye (Route: /kampanye)

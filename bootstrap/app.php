@@ -10,14 +10,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    
     ->withMiddleware(function (Middleware $middleware) {
-    $middleware->alias([
-        'donatur' => \App\Http\Middleware\CheckDonatur::class,
-        'pengelola' => \App\Http\Middleware\CheckPengelola::class,
-    ]);
-    })
+        $middleware->alias([
+            'donatur' => \App\Http\Middleware\CheckDonatur::class,
+            'pengelola' => \App\Http\Middleware\CheckPengelola::class,
+        ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'midtrans/callback',
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -119,9 +119,49 @@
 
                 <div class="h-px w-full bg-outline-variant/30 mb-md"></div>
 
-                <button class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 flex justify-center items-center gap-xs text-[16px] mb-sm">
-                    <span class="material-symbols-outlined fill">favorite</span> Sumbang Sekarang
-                </button>
+                @if(session('auth_type') === 'donatur')
+                    <form action="{{ route('donasi.store', $detail->id_kampanye) }}" method="POST" class="mb-sm">
+                        @csrf
+                        <label for="nominal" class="block font-label-md text-label-md text-on-surface mb-xs">
+                            Nominal Donasi
+                        </label>
+                        <input
+                            type="number"
+                            id="nominal"
+                            name="nominal"
+                            min="10000"
+                            step="1000"
+                            value="{{ old('nominal') }}"
+                            placeholder="Masukkan nominal donasi"
+                            required
+                            class="w-full px-sm py-sm mb-xs rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40"
+                        >
+                        @error('nominal')
+                            <p class="font-caption text-caption text-error mb-xs">{{ $message }}</p>
+                        @enderror
+                        <button type="submit" class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 flex justify-center items-center gap-xs text-[16px]">
+                            <span class="material-symbols-outlined fill">favorite</span> Sumbang Sekarang
+                        </button>
+                    </form>
+                @else
+                    <div class="mb-sm rounded-2xl border border-outline-variant bg-surface-container p-sm text-center">
+                        <span class="material-symbols-outlined text-primary text-[32px] mb-xs">login</span>
+                        <p class="font-label-md text-label-md text-on-surface mb-xs">
+                            Login sebagai donatur untuk berdonasi.
+                        </p>
+                        <p class="font-caption text-caption text-on-surface-variant mb-sm">
+                            @if(session('auth_type') === 'pengelola')
+                                Akun pengelola tidak dapat melakukan donasi.
+                            @else
+                                Masuk terlebih dahulu agar donasi tercatat di riwayat akunmu.
+                            @endif
+                        </p>
+                        <a href="/login"
+                           class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all flex justify-center items-center gap-xs">
+                            <span class="material-symbols-outlined text-[18px]">login</span> Login untuk Berdonasi
+                        </a>
+                    </div>
+                @endif
 
                 <a href="/kampanye"
                    class="w-full py-sm border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded-full hover:bg-surface-container transition-colors flex justify-center items-center gap-xs">

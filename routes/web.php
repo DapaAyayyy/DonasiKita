@@ -18,7 +18,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Sementara (Diberi Middleware)
 Route::get('/donatur/dashboard', function () {

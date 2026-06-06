@@ -15,6 +15,15 @@ class CheckDonatur
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (
+            ! $request->session()->has('auth_id') ||
+            $request->session()->get('auth_type') !== 'donatur'
+        ) {
+            return redirect('/login')->withErrors([
+                'auth' => 'Silakan login sebagai donatur terlebih dahulu.',
+            ]);
+        }
+
         return $next($request);
     }
 }

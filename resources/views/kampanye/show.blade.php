@@ -10,7 +10,7 @@
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <a href="/kampanye" class="hover:text-primary transition-colors">Kampanye</a>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-on-surface font-semibold truncate max-w-[240px]">{{ $detail->judul }}</span>
+        <span class="text-on-surface font-semibold truncate max-w-[240px]">{{ $detail->judul_kampanye ?? 'Judul Tidak Tersedia' }}</span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-lg">
@@ -19,7 +19,7 @@
             
             <div class="rounded-2xl overflow-hidden shadow-soft-1">
                 <img src="{{ !empty($detail->foto_sampul) ? asset('assets/images/' . $detail->foto_sampul) : 'https://placehold.co/600x400?text=Belum+Ada+Sampul' }}"
-                     alt="{{ $detail->judul }}"
+                     alt="{{ $detail->judul_kampanye ?? 'Judul Tidak Tersedia' }}"
                      class="w-full object-cover aspect-video">
             </div>
 
@@ -44,13 +44,16 @@
                 @if(isset($detail->donasi) && $detail->donasi->count() > 0)
                     <div class="flex flex-col gap-sm">
                         @foreach($detail->donasi as $donatur)
+                            @php
+                                $namaDonatur = $donatur->donatur->nama ?? 'Hamba Allah';
+                            @endphp
                             <div class="flex items-center justify-between p-sm bg-surface-container rounded-xl">
                                 <div class="flex items-center gap-sm">
                                     <div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
-                                        {{ strtoupper(substr($donatur->nama ?? 'H', 0, 1)) }}
+                                        {{ strtoupper(substr($namaDonatur, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <p class="font-label-md text-label-md text-on-surface">{{ $donatur->nama ?? 'Hamba Allah' }}</p>
+                                        <p class="font-label-md text-label-md text-on-surface">{{ $namaDonatur }}</p>
                                         <span class="font-caption text-caption px-xs py-[2px] rounded-full
                                             {{ ($donatur->status_donasi ?? '') === 'berhasil' ? 'bg-tertiary-container/20 text-tertiary' : 'bg-surface-container-high text-on-surface-variant' }}">
                                             {{ ucfirst($donatur->status_donasi ?? 'Pending') }}
@@ -76,7 +79,7 @@
         <div class="lg:col-span-2">
             <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 p-md sticky top-[100px]">
                 
-                <h1 class="font-headline-lg text-headline-lg text-on-surface mb-md leading-snug">{{ $detail->judul }}</h1>
+                <h1 class="font-headline-lg text-headline-lg text-on-surface mb-md leading-snug">{{ $detail->judul_kampanye ?? 'Judul Tidak Tersedia' }}</h1>
 
                 <div class="flex items-center gap-sm mb-md p-sm bg-surface-container rounded-xl">
                     <div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold flex-shrink-0">

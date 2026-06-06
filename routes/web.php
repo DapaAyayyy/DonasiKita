@@ -32,3 +32,6 @@ Route::get('/pengelola/dashboard', function () {
 Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
 
 Route::get('/login', function () {return view('auth.login');});
+
+// route sementara leaderboard
+Route::get('/leaderboard', function () {return view('leaderboard');});

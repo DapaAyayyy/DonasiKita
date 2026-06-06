@@ -71,10 +71,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
-    }
-
-    // --- TARUH METHOD TUGASMU DI SINI ---
+    // 4. Showregister dan Register
 
     public function showRegister()
     {

@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampanyeSosialController;
-use App\Http\Controllers\AuthController; 
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LeaderboardController; // Tambahan Increment 4
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
@@ -28,12 +28,7 @@ Route::get('/donatur/dashboard', function () {
 Route::get('/pengelola/dashboard', function () {
     return 'Dashboard Pengelola';
 })->middleware('pengelola');
-// Route untuk Detail Kampanye
 
-Route::get('/tentang-kami', function () {
-    return view('tentang-kami');
-});
 
-Route::get('/hubungi-kami', function () {
-    return view('hubungi-kami');
-});
+// ROUTE INCREMENT 4 (Publik)
+Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');

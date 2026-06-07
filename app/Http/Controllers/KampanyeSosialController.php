@@ -57,7 +57,14 @@ class KampanyeSosialController extends Controller
     // Route: /kampanye/{id}
     public function show($id)
     {
-        $kampanye = KampanyeSosial::with(['penerima', 'donasi.donatur'])->findOrFail($id);
+        $kampanye = KampanyeSosial::with([
+            'penerima',
+            'donasi' => function ($query) {
+                $query->where('status_donasi', 'berhasil')
+                    ->orderByDesc('tanggal_donasi');
+            },
+            'donasi.donatur',
+        ])->findOrFail($id);
 
         return view('kampanye.show', ['detail' => $kampanye]);
     }

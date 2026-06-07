@@ -20,25 +20,13 @@ namespace App\Http\Controllers;
           // Bikin Order ID unik untuk Midtrans
           $orderId = 'DONASI-' . time() . '-' . rand(100, 999);
 
-          // 2. Simpan data awal ke database dengan status 'pending'
-          DB::table('donasi')->insert([
-              'id_donatur' => session('auth_id'),
-              'id_kampanye' => $id_kampanye,
-              'id_metode' => 1, // Isi default dulu: Transfer BCA sesuai crowdfunding.sql
-              'nominal' => $nominal,
-              'status_donasi' => 'pending',
-              'tanggal_donasi' => now(),
-              'midtrans_order_id' => $orderId, // Kolom ini ada di crowdfunding.sql
-              // midtrans_transaction_id, payment_type, paid_at otomatis NULL
-          ]);
-
-          // 3. Konfigurasi Midtrans
+          // 2. Konfigurasi Midtrans
           Config::$serverKey = config('midtrans.server_key');
           Config::$isProduction = config('midtrans.is_production');
           Config::$isSanitized = config('midtrans.is_sanitized');
           Config::$is3ds = config('midtrans.is_3ds');
 
-          // 4. Siapkan data untuk Midtrans
+          // 3. Siapkan data untuk Midtrans
           $params = [
               'transaction_details' => [
                   'order_id' => $orderId,
@@ -49,14 +37,34 @@ namespace App\Http\Controllers;
               ],
           ];
 
-          // 5. Generate Snap Token
           try {
+              DB::beginTransaction();
+
+              // 4. Simpan data awal ke database dengan status 'pending'
+              DB::table('donasi')->insert([
+                  'id_donatur' => session('auth_id'),
+                  'id_kampanye' => $id_kampanye,
+                  'id_metode' => 1, // Isi default dulu: Transfer BCA sesuai crowdfunding.sql
+                  'nominal' => $nominal,
+                  'status_donasi' => 'pending',
+                  'tanggal_donasi' => now(),
+                  'midtrans_order_id' => $orderId, // Kolom ini ada di crowdfunding.sql
+                  // midtrans_transaction_id, payment_type, paid_at otomatis NULL
+              ]);
+
+              // 5. Generate Snap Token
               $snapToken = Snap::getSnapToken($params);
+
+              DB::commit();
 
               // 6. Lempar ke halaman pembayaran
               return view('donasi.bayar', compact('snapToken', 'orderId', 'nominal'));
 
           } catch (\Exception $e) {
+              if (DB::transactionLevel() > 0) {
+                  DB::rollBack();
+              }
+
               return back()->with('error', 'Gagal memproses ke Midtrans: ' . $e->getMessage());
           }
       }

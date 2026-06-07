@@ -64,22 +64,18 @@
                     <span class="font-label-md text-label-md">Leaderboard</span>
                 </a>
 
-                {{-- TAMPILKAN MENU RIWAYAT JIKA SUDAH LOGIN --}}
-                @if(session()->has('auth_id'))
-                <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/riwayat-donasi">
-                    <span class="material-symbols-outlined">receipt_long</span>
-                    <span class="font-label-md text-label-md">Riwayat</span>
-                </a>
-                @endif
-            </div>
-            
-            <div class="flex items-center gap-sm">
-                
-                {{-- JIKA SUDAH LOGIN (Sesi Aktif) --}}
-                @if(session()->has('auth_id'))
-                    <div class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
-                        <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
-                        {{ session('auth_name') }}
+                        <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('leaderboard.index') }}">
+                            <span class="material-symbols-outlined">emoji_events</span>
+                            <span class="font-label-md text-label-md">Leaderboard</span>
+                        </a>
+                        
+                        {{-- Tambahan menu Riwayat yang hanya muncul kalau udah login --}}
+                        @if(session('auth_type') === 'donatur')
+                        <a class="flex items-center gap-xs {{ request()->is('riwayat') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('riwayat.index') }}">
+                            <span class="material-symbols-outlined">history</span>
+                            <span class="font-label-md text-label-md">Riwayat</span>
+                        </a>
+                        @endif
                     </div>
                     
                     {{-- DI SINI LETAK PERUBAHANNYA: TOMBOL LOGOUT ASLI (POST) --}}

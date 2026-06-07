@@ -19,7 +19,7 @@
         @forelse ($riwayat as $item)
             @php
                 // Logika Warna Badge Status
-                $status = strtolower($item->status ?? 'pending');
+                $status = strtolower($item->status_donasi ?? 'pending');
                 if ($status == 'berhasil') {
                     $badgeBg = 'bg-green-100';
                     $badgeText = 'text-green-800';
@@ -51,13 +51,13 @@
                         <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-on-surface-variant">
                             <span class="flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y, H:i') }}
+                                {{ \Carbon\Carbon::parse($item->tanggal_donasi)->translatedFormat('d F Y, H:i') }}
                             </span>
                             <span class="hidden md:inline text-outline-variant">•</span>
                             <span class="flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[16px]">account_balance_wallet</span>
                                 {{-- Mengambil metode pembayaran dari relasi Backend 1 --}}
-                                {{ $item->metodePembayaran->nama ?? 'Transfer Bank' }}
+                                {{ $item->metodePembayaran->nama_metode ?? $item->payment_type ?? 'Midtrans' }}
                             </span>
                         </div>
                     </div>

@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampanyeSosialController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LeaderboardController; // Tambahan Increment 4
+use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\ProfilDonaturController;
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
@@ -32,3 +33,9 @@ Route::get('/pengelola/dashboard', function () {
 
 // ROUTE INCREMENT 4 (Publik)
 Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
+
+Route::middleware('donatur')->group(function () {
+    Route::get('/profil', [ProfilDonaturController::class, 'show'])->name('donatur.profil');
+    Route::put('/profil', [ProfilDonaturController::class, 'update'])->name('donatur.profil.update');
+    Route::put('/profil/password', [ProfilDonaturController::class, 'updatePassword'])->name('donatur.profil.password');
+});

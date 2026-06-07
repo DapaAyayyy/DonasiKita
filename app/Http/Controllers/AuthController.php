@@ -70,6 +70,7 @@ class AuthController extends Controller
         // Hapus semua data session dan token lama
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+    }
 
     // 4. Showregister dan Register
 

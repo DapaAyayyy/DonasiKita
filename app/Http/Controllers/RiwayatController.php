@@ -23,7 +23,7 @@ class RiwayatController extends Controller
             ->orderBy('tanggal_donasi', 'desc')
             ->get();
 
-        // 4. Lempar data ke view (Frontend 1 yang akan buat file riwayat.blade.php)
-        return view('riwayat', compact('riwayat'));
+        // 4. Lempar data ke view riwayat donatur
+        return view('donatur.riwayat', compact('riwayat'));
     }
 }

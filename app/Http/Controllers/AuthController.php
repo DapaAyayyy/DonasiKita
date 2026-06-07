@@ -67,9 +67,11 @@ class AuthController extends Controller
     // 3. Proses Logout
     public function logout(Request $request)
     {
-        // Hapus semua data session dan token lama
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+    }
+
+        return redirect('/login');
     }
 
     // 4. Showregister dan Register
@@ -81,16 +83,21 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
+        $validated = $request->validate([
+            'nama' => 'required|string|max:100',
             'email' => 'required|email|unique:donatur,email',
-            'password' => 'required|min:6',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'password' => 'required|min:6|confirmed',
+            'terms' => 'accepted',
         ]);
 
         Donatur::create([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'password_hash' => Hash::make($request->password),
+            'nama' => $validated['nama'],
+            'email' => $validated['email'],
+            'no_hp' => $validated['no_hp'] ?? null,
+            'alamat' => $validated['alamat'] ?? null,
+            'password_hash' => Hash::make($validated['password']),
         ]);
 
         return redirect('/login')->with('success', 'Registrasi berhasil, silakan login.');

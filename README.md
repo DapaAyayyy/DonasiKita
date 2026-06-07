@@ -190,8 +190,8 @@ Kelompok 7 — Rekayasa Perangkat Lunak
 | Ahmad Dzaki Fadlurrahman | Back End |
 | Fariz Akhadi | Back End |
 | Daffa Azmi Ikhtiar Fadhil | Project Manager |
-| Muhammad Syarif Sabiqul Khoir | Front End |
-| Muhammad Rafa Fathurrahim | Front End |
+| Muhammad Syarif Sabiqul Khoir | Front End 2|
+| Muhammad Rafa Fathurrahim | Front End 1|
 
 ---
 

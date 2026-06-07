@@ -5,6 +5,7 @@ use App\Http\Controllers\KampanyeSosialController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LeaderboardController; // Tambahan Increment 4
 use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\RiwayatController;
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
@@ -41,3 +42,6 @@ Route::post('/midtrans/callback', [DonasiController::class, 'callback'])
 
 // ROUTE INCREMENT 4 (Publik)
 Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
+Route::get('/riwayat', [RiwayatController::class, 'index'])
+    ->middleware('donatur')
+    ->name('riwayat.index');

@@ -146,6 +146,7 @@
     const payButton = document.getElementById('pay-button');
     const paymentStatus = document.getElementById('payment-status');
     const snapToken = @json($snapToken);
+    const campaignListUrl = @json(url('/kampanye'));
 
     function showPaymentStatus(message, type = 'info') {
         const colorMap = {
@@ -159,6 +160,12 @@
         paymentStatus.classList.remove('hidden');
     }
 
+    function redirectToCampaignList(delay = 2500) {
+        window.setTimeout(function () {
+            window.location.href = campaignListUrl;
+        }, delay);
+    }
+
     payButton?.addEventListener('click', function () {
         if (!window.snap) {
             showPaymentStatus('Snap Midtrans belum berhasil dimuat. Cek koneksi internet atau konfigurasi client key.', 'error');
@@ -167,10 +174,11 @@
 
         window.snap.pay(snapToken, {
             onSuccess: function () {
-                showPaymentStatus('Pembayaran berhasil. Terima kasih sudah berdonasi!', 'success');
+                showPaymentStatus('Pembayaran berhasil. Terima kasih sudah berdonasi! Status akan diperbarui setelah notifikasi Midtrans diproses. Kamu akan diarahkan kembali ke halaman kampanye.', 'success');
+                redirectToCampaignList();
             },
             onPending: function () {
-                showPaymentStatus('Transaksi masih pending. Silakan selesaikan instruksi pembayaran dari Midtrans.', 'info');
+                showPaymentStatus('Transaksi masih pending. Silakan selesaikan instruksi pembayaran dari Midtrans. Status akan diperbarui setelah notifikasi Midtrans diproses.', 'info');
             },
             onError: function () {
                 showPaymentStatus('Pembayaran gagal diproses. Silakan coba kembali.', 'error');

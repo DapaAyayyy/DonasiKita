@@ -47,3 +47,4 @@ Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leade
 
 // Area Donatur di Main Web (Riwayat)
 Route::get('/riwayat-donasi', [RiwayatController::class, 'index'])->name('donatur.riwayat');
+

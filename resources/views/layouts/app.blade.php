@@ -77,10 +77,11 @@
                 
                 {{-- JIKA SUDAH LOGIN (Sesi Aktif) --}}
                 @if(session()->has('auth_id'))
-                    <div class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
+                    <!-- Tombol Menuju Profil -->
+                    <a href="{{ route('donatur.profil') ?? '/profil' }}" class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full hover:bg-[#336600] hover:text-white transition-colors cursor-pointer shadow-sm active:scale-95">
                         <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
                         {{ session('auth_name') }}
-                    </div>
+                    </a>
                     
                     {{-- DI SINI LETAK PERUBAHANNYA: TOMBOL LOGOUT ASLI (POST) --}}
                     <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">

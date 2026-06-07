@@ -7,9 +7,11 @@
     <link rel="icon" href="{{ asset('assets/icons/donasikitaicon.png') }}" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Mengimpor Inter dan Plus Jakarta Sans dari Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     
     <style>
+        /* Menjadikan Inter sebagai default font untuk seluruh halaman */
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>

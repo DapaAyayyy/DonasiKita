@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donatur;
+use App\Models\Donasi;
 use App\Models\KampanyeSosial;
 use Illuminate\Http\Request;
 
@@ -57,6 +58,7 @@ class KampanyeSosialController extends Controller
     // Route: /kampanye/{id}
     public function show($id)
     {
+        $kampanye = KampanyeSosial::findOrFail($id);
         $kampanye = KampanyeSosial::with([
             'penerima',
             'donasi' => function ($query) {
@@ -66,6 +68,13 @@ class KampanyeSosialController extends Controller
             'donasi.donatur',
         ])->findOrFail($id);
 
-        return view('kampanye.show', ['detail' => $kampanye]);
+        // Tarik feedback dari donasi yang statusnya berhasil
+        $feedbacks = Donasi::with(['donatur', 'feedback'])
+            ->where('id_kampanye', $id)
+            ->where('status_donasi', 'berhasil')
+            ->whereHas('feedback') // Hanya ambil donasi yang punya feedback
+            ->get();
+
+        return view('kampanye.show', compact('kampanye', 'feedbacks'));
     }
 }

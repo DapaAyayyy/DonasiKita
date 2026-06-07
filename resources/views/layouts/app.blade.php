@@ -59,22 +59,42 @@
                     <span class="font-label-md text-label-md">Kampanye</span>
                 </a>
 
-                <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('leaderboard.index') }}">
+                <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/leaderboard">
                     <span class="material-symbols-outlined">emoji_events</span>
                     <span class="font-label-md text-label-md">Leaderboard</span>
                 </a>
 
-                {{-- Tambahan menu Riwayat yang hanya muncul kalau udah login sebagai donatur --}}
-                @if(session('auth_type') === 'donatur')
-                    <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('donatur.riwayat') }}">
-                        <span class="material-symbols-outlined">history</span>
-                        <span class="font-label-md text-label-md">Riwayat</span>
-                    </a>
+                {{-- TAMPILKAN MENU RIWAYAT JIKA SUDAH LOGIN --}}
+                @if(session()->has('auth_id'))
+                <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/riwayat-donasi">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span class="font-label-md text-label-md">Riwayat</span>
+                </a>
                 @endif
-
-                @if(session('auth_type'))
-                    {{-- DI SINI LETAK PERUBAHANNYA: TOMBOL LOGOUT ASLI (POST) --}}
-                    <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+            </div>
+            
+            <div class="flex items-center gap-sm">
+                
+                {{-- JIKA SUDAH LOGIN --}}
+                @if(session()->has('auth_id'))
+                    
+                    {{-- JIKA PENGELOLA YANG LOGIN --}}
+                    @if(session('auth_type') === 'pengelola')
+                        <a href="/pengelola/dashboard" class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-white transition-colors">
+                            <span class="material-symbols-outlined fill text-[18px]">dashboard</span>
+                            Dashboard
+                        </a>
+                    
+                    {{-- JIKA DONATUR YANG LOGIN --}}
+                    @else
+                        <div class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
+                            <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
+                            {{ session('auth_name') }}
+                        </div>
+                    @endif
+                    
+                    {{-- TOMBOL LOGOUT UNTUK KEDUANYA --}}
+                    <form action="{{ url('/logout') }}" method="POST" class="m-0 p-0">
                         @csrf
                         <button type="submit" class="flex items-center gap-xs px-md py-sm text-white font-bold text-sm rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-[#c81e1e]">
                             <span class="material-symbols-outlined text-[18px]">logout</span>
@@ -89,7 +109,7 @@
                 @endif
 
             </div>
-        </div>
+            </div>
     </nav>
 
     <main>
@@ -111,7 +131,6 @@
                 </p>
             </div>
             
-            <!-- Perbaikan: Menghapus tombol login/daftar yang tersasar di footer -->
             <div class="flex flex-wrap justify-center gap-md md:gap-lg font-body-md text-body-md">
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/tentang-kami">Tentang Kami</a>
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/hubungi-kami">Hubungi Kami</a>

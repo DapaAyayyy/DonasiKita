@@ -42,66 +42,64 @@
 <body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden">
     
     <nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm transition-all duration-300 ease-in-out">
-            <div class="flex justify-between items-center px-lg py-md max-w-container-max mx-auto">
-                <a href="/" class="flex items-center cursor-pointer group">
-                    <img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" 
-                        src="{{ asset('assets/icons/donasikitaicon.png') }}">
-                </a>            
-                    <div class="hidden md:flex items-center gap-lg">
-                        <a class="flex items-center gap-xs {{ request()->is('/') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/">
-                            <span class="material-symbols-outlined fill">home</span>
-                            <span class="font-label-md text-label-md">Beranda</span>
-                        </a>
+        <div class="flex justify-between items-center px-lg py-md max-w-container-max mx-auto">
+            <a href="/" class="flex items-center cursor-pointer group">
+                <img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" 
+                    src="{{ asset('assets/icons/donasikitaicon.png') }}">
+            </a>            
+            
+            <div class="hidden md:flex items-center gap-lg">
+                <a class="flex items-center gap-xs {{ request()->is('/') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/">
+                    <span class="material-symbols-outlined fill">home</span>
+                    <span class="font-label-md text-label-md">Beranda</span>
+                </a>
 
-                        <a class="flex items-center gap-xs {{ request()->is('kampanye') || request()->is('kampanye/*') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/kampanye">
-                            <span class="material-symbols-outlined">campaign</span>
-                            <span class="font-label-md text-label-md">Kampanye</span>
-                        </a>
+                <a class="flex items-center gap-xs {{ request()->is('kampanye') || request()->is('kampanye/*') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/kampanye">
+                    <span class="material-symbols-outlined">campaign</span>
+                    <span class="font-label-md text-label-md">Kampanye</span>
+                </a>
 
-                        <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="#">
-                            <span class="material-symbols-outlined">emoji_events</span>
-                            <span class="font-label-md text-label-md">Leaderboard</span>
-                        </a>
-                        
-                        {{-- Tambahan menu Riwayat yang hanya muncul kalau udah login --}}
-                        @if(session()->has('auth_id'))
-                        <a class="flex items-center gap-xs {{ request()->is('riwayat') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="#">
-                            <span class="material-symbols-outlined">history</span>
-                            <span class="font-label-md text-label-md">Riwayat</span>
-                        </a>
-                        @endif
-                    </div>
+                <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/leaderboard">
+                    <span class="material-symbols-outlined">emoji_events</span>
+                    <span class="font-label-md text-label-md">Leaderboard</span>
+                </a>
 
-                <div class="flex items-center gap-sm">
-                    {{-- Logika Kondisional: Jika User SUDAH Login --}}
-                    @if(session()->has('auth_id'))
-                        <div class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
-                            <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
-                            {{ session('auth_name') }}
-                        </div>
-                        
-                        {{-- Tombol Logout menggunakan form POST untuk keamanan (sesuai best practice Laravel) --}}
-                        <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
-                            @csrf
-                            <button type="submit" class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-[#c81e1e]">
-                                <span class="material-symbols-outlined">logout</span>
-                                Logout
-                            </button>
-                        </form>
-
-                    {{-- Logika Kondisional: Jika User BELUM Login --}}
-                    @else
-                        <a href="/login" class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">
-                            Login
-                        </a>
-                        <a href="/register" class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary">
-                            <span class="material-symbols-outlined">person_add</span>
-                            Daftar
-                        </a>
-                    @endif
-                </div>
+                {{-- TAMPILKAN MENU RIWAYAT JIKA SUDAH LOGIN --}}
+                @if(session()->has('auth_id'))
+                <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/riwayat-donasi">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span class="font-label-md text-label-md">Riwayat</span>
+                </a>
+                @endif
             </div>
-        </nav>
+            
+            <div class="flex items-center gap-sm">
+                
+                {{-- JIKA SUDAH LOGIN (Sesi Aktif) --}}
+                @if(session()->has('auth_id'))
+                    <div class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
+                        <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
+                        {{ session('auth_name') }}
+                    </div>
+                    
+                    {{-- DI SINI LETAK PERUBAHANNYA: TOMBOL LOGOUT ASLI (POST) --}}
+                    <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-xs px-md py-sm text-white font-bold text-sm rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-[#c81e1e]">
+                            <span class="material-symbols-outlined text-[18px]">logout</span>
+                            Logout
+                        </button>
+                    </form>
+
+                {{-- JIKA BELUM LOGIN --}}
+                @else
+                    <a href="/login" class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">Login</a>
+                    <a href="/register" class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary"><span class="material-symbols-outlined">person_add</span>Daftar</a>
+                @endif
+
+            </div>
+        </div>
+    </nav>
 
     <main>
         @yield('content')
@@ -121,6 +119,8 @@
                     Dibuat dengan semangat untuk Projek Akhir RPL (｡・ω・｡)
                 </p>
             </div>
+            
+            <!-- Perbaikan: Menghapus tombol login/daftar yang tersasar di footer -->
             <div class="flex flex-wrap justify-center gap-md md:gap-lg font-body-md text-body-md">
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/tentang-kami">Tentang Kami</a>
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/hubungi-kami">Hubungi Kami</a>

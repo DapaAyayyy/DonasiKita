@@ -44,6 +44,6 @@ Route::post('/midtrans/callback', [DonasiController::class, 'callback'])
 // ROUTE INCREMENT 4 (Publik & Donatur)
 // Area Publik (Leaderboard)
 Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
-Route::get('/riwayat', [RiwayatController::class, 'index'])
+Route::get('/riwayat-donasi', [RiwayatController::class, 'index'])
     ->middleware('donatur')
-    ->name('riwayat.index');
+    ->name('donatur.riwayat');

@@ -47,25 +47,32 @@
                 <img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" 
                     src="{{ asset('assets/icons/donasikitaicon.png') }}">
             </a>            
-                <div class="hidden md:flex items-center gap-lg">
-                    <a class="flex items-center gap-xs {{ request()->is('/') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/">
-                        <span class="material-symbols-outlined fill">home</span>
-                        <span class="font-label-md text-label-md">Beranda</span>
-                    </a>
+            <div class="hidden md:flex items-center gap-lg">
+                <a class="flex items-center gap-xs {{ request()->is('/') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/">
+                    <span class="material-symbols-outlined fill">home</span>
+                    <span class="font-label-md text-label-md">Beranda</span>
+                </a>
 
-                    <a class="flex items-center gap-xs {{ request()->is('kampanye') || request()->is('kampanye/*') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/kampanye">
-                        <span class="material-symbols-outlined">campaign</span>
-                        <span class="font-label-md text-label-md">Kampanye</span>
-                    </a>
+                <a class="flex items-center gap-xs {{ request()->is('kampanye') || request()->is('kampanye/*') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/kampanye">
+                    <span class="material-symbols-outlined">campaign</span>
+                    <span class="font-label-md text-label-md">Kampanye</span>
+                </a>
 
-                    <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="#">
-                        <span class="material-symbols-outlined">emoji_events</span>
-                        <span class="font-label-md text-label-md">Leaderboard</span>
-                    </a>
-                </div>
+                <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/leaderboard">
+                    <span class="material-symbols-outlined">emoji_events</span>
+                    <span class="font-label-md text-label-md">Leaderboard</span>
+                </a>
+
+                <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/riwayat-donasi">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span class="font-label-md text-label-md">Riwayat</span>
+                </a>
+            </div>
+            
+            <!-- Perbaikan: Tombol Login & Daftar di Navbar sekarang menggunakan <a> -->
             <div class="flex items-center gap-sm">
-                <button class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">Login</button>
-                <button class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary"><span class="material-symbols-outlined">person_add</span>Daftar</button>
+                <a href="/login" class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">Login</a>
+                <a href="/register" class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary"><span class="material-symbols-outlined">person_add</span>Daftar</a>
             </div>
         </div>
     </nav>
@@ -88,6 +95,8 @@
                     Dibuat dengan semangat untuk Projek Akhir RPL (｡・ω・｡)
                 </p>
             </div>
+            
+            <!-- Perbaikan: Menghapus tombol login/daftar yang tersasar di footer -->
             <div class="flex flex-wrap justify-center gap-md md:gap-lg font-body-md text-body-md">
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/tentang-kami">Tentang Kami</a>
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/hubungi-kami">Hubungi Kami</a>

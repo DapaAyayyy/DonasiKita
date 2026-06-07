@@ -59,25 +59,20 @@
                     <span class="font-label-md text-label-md">Kampanye</span>
                 </a>
 
-                <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/leaderboard">
+                <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('leaderboard.index') }}">
                     <span class="material-symbols-outlined">emoji_events</span>
                     <span class="font-label-md text-label-md">Leaderboard</span>
                 </a>
 
-                        <a class="flex items-center gap-xs {{ request()->is('leaderboard') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('leaderboard.index') }}">
-                            <span class="material-symbols-outlined">emoji_events</span>
-                            <span class="font-label-md text-label-md">Leaderboard</span>
-                        </a>
-                        
-                        {{-- Tambahan menu Riwayat yang hanya muncul kalau udah login --}}
-                        @if(session('auth_type') === 'donatur')
-                        <a class="flex items-center gap-xs {{ request()->is('riwayat') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('riwayat.index') }}">
-                            <span class="material-symbols-outlined">history</span>
-                            <span class="font-label-md text-label-md">Riwayat</span>
-                        </a>
-                        @endif
-                    </div>
-                    
+                {{-- Tambahan menu Riwayat yang hanya muncul kalau udah login sebagai donatur --}}
+                @if(session('auth_type') === 'donatur')
+                    <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="{{ route('donatur.riwayat') }}">
+                        <span class="material-symbols-outlined">history</span>
+                        <span class="font-label-md text-label-md">Riwayat</span>
+                    </a>
+                @endif
+
+                @if(session('auth_type'))
                     {{-- DI SINI LETAK PERUBAHANNYA: TOMBOL LOGOUT ASLI (POST) --}}
                     <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
                         @csrf

@@ -20,6 +20,10 @@ class Donasi extends Model
         'id_metode',
         'nominal',
         'status_donasi',
+        'midtrans_order_id',
+        'midtrans_transaction_id',
+        'payment_type',
+        'paid_at',
     ];
 
     public function donatur()

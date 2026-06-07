@@ -75,10 +75,17 @@
 
             <div class="hidden md:flex items-center justify-end gap-sm justify-self-end">
                 @if(session('auth_type'))
-                    <div class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
-                        <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
-                        {{ session('auth_name') }}
-                    </div>
+                    @if(session('auth_type') === 'donatur')
+                        <a href="{{ route('donatur.profil') }}" class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full hover:bg-[#336600] hover:text-white transition-colors cursor-pointer shadow-sm active:scale-95" aria-label="Buka profil {{ session('auth_name') }}">
+                            <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
+                            {{ session('auth_name') }}
+                        </a>
+                    @else
+                        <div class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
+                            <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
+                            {{ session('auth_name') }}
+                        </div>
+                    @endif
 
                     {{-- Tombol logout dipisah dari menu utama supaya navbar tetap benar-benar di tengah --}}
                     <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">

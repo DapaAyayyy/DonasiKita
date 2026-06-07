@@ -14,6 +14,9 @@ class Leaderboard extends Model
 
     protected $fillable = [
         'id_donatur',
+        'total_donasi',
+        'total_transaksi',
+        'level',
     ];
 
 

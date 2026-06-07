@@ -22,46 +22,16 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'login_as' => 'nullable|in:donatur,pengelola',
         ]);
 
-        // SKENARIO A: Cek Login Donatur
+        $loginAs = $request->input('login_as', 'donatur');
 
-        $donatur = Donatur::where('email', $request->email)->first();
-
-        // Pengecekan menggunakan Hash::check sesuai instruksi Increment 2
-          if ($donatur && $this->passwordMatches($request->password, $donatur->password_hash, $donatur)) {
-            $request->session()->regenerate();
-
-            // Simpan Session Donatur
-            session([
-                'auth_type' => 'donatur',
-                'auth_id' => $donatur->id_donatur,
-                'auth_name' => $donatur->nama,
-            ]);
-
-            return redirect()->intended('/kampanye');
+        if ($loginAs === 'pengelola') {
+            return $this->loginPengelola($request);
         }
 
-        // SKENARIO B: Cek Login Pengelola
-
-        $pengelola = Pengelola::where('email', $request->email)->first();
-
-          if ($pengelola && $this->passwordMatches($request->password, $pengelola->password_hash, $pengelola)) {
-            $request->session()->regenerate();
-
-            // Simpan Session Pengelola
-            session([
-                'auth_type' => 'pengelola',
-                'auth_id' => $pengelola->id_pengelola,
-                'auth_name' => $pengelola->nama,
-                'auth_role' => $pengelola->role,
-            ]);
-
-            return redirect()->intended('/pengelola/dashboard');
-        }
-
-        // JIKA GAGAL LOGIN
-        return back()->withErrors(['email' => 'Email atau password salah!']);
+        return $this->loginDonatur($request);
     }
 
     // 3. Proses Logout
@@ -69,7 +39,6 @@ class AuthController extends Controller
     {
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-    }
 
         return redirect('/login');
     }
@@ -123,4 +92,49 @@ class AuthController extends Controller
 
       return false;
   }
+
+    private function loginDonatur(Request $request)
+    {
+        $donatur = Donatur::where('email', $request->email)->first();
+
+        if (! $donatur || ! $this->passwordMatches($request->password, $donatur->password_hash, $donatur)) {
+            return back()->withErrors(['email' => 'Email atau password salah!']);
+        }
+
+        $donatur->save();
+        $request->session()->regenerate();
+
+        session([
+            'auth_type' => 'donatur',
+            'auth_id' => $donatur->id_donatur,
+            'auth_name' => $donatur->nama,
+        ]);
+
+        return redirect()->intended('/kampanye');
+    }
+
+    private function loginPengelola(Request $request)
+    {
+        $pengelola = Pengelola::where('email', $request->email)->first();
+
+        if (! $pengelola || ! $this->passwordMatches($request->password, $pengelola->password_hash, $pengelola)) {
+            return back()->withErrors(['email' => 'Email atau password salah!']);
+        }
+
+        if (($pengelola->status ?? 'aktif') !== 'aktif') {
+            return back()->withErrors(['email' => 'Akun pengelola sedang nonaktif.']);
+        }
+
+        $pengelola->save();
+        $request->session()->regenerate();
+
+        session([
+            'auth_type' => 'pengelola',
+            'auth_id' => $pengelola->id_pengelola,
+            'auth_name' => $pengelola->nama,
+            'auth_role' => $pengelola->role,
+        ]);
+
+        return redirect()->intended('/pengelola/dashboard');
+    }
 }

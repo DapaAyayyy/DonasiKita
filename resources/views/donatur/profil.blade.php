@@ -63,24 +63,21 @@
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-[#2E3192] to-[#4B399A] rounded-3xl p-6 text-white shadow-soft-2 relative overflow-hidden">
-                <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/10 rounded-full"></div>
-                <div class="absolute -bottom-10 -left-10 w-32 h-32 border-[20px] border-white/5 rounded-full"></div>
-                
-                <h3 class="font-['Plus_Jakarta_Sans'] text-lg font-bold mb-4 relative z-10 flex items-center gap-2">
+            <div class="bg-surface-container-lowest rounded-3xl p-6 text-[#0B132A] shadow-soft-2 border border-outline-variant/30 relative overflow-hidden">
+                <h3 class="font-['Plus_Jakarta_Sans'] text-lg font-bold mb-4 relative z-10 flex items-center gap-2 text-primary">
                     <span class="material-symbols-outlined">analytics</span>
                     Dampak Kebaikanmu
                 </h3>
                 
                 <div class="space-y-4 relative z-10">
                     <div>
-                        <p class="text-blue-200 text-sm mb-1">Total Donasi Berhasil</p>
-                        <p class="text-2xl font-bold">Rp {{ number_format($totalDonasi ?? 0, 0, ',', '.') }}</p>
+                        <p class="text-on-surface-variant text-sm mb-1">Total Donasi Berhasil</p>
+                        <p class="text-2xl font-bold text-[#0B132A]">Rp {{ number_format($statistik->total_nominal ?? 0, 0, ',', '.') }}</p>
                     </div>
-                    <hr class="border-white/20">
+                    <hr class="border-outline-variant/30">
                     <div>
-                        <p class="text-blue-200 text-sm mb-1">Jumlah Transaksi</p>
-                        <p class="text-xl font-bold">{{ $jumlahTransaksi ?? 0 }} <span class="text-sm font-normal text-blue-200">kali membantu</span></p>
+                        <p class="text-on-surface-variant text-sm mb-1">Jumlah Transaksi</p>
+                        <p class="text-xl font-bold text-[#0B132A]">{{ $statistik->total_transaksi ?? 0 }} <span class="text-sm font-normal text-on-surface-variant">kali membantu</span></p>
                     </div>
                 </div>
             </div>

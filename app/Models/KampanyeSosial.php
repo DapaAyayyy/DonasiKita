@@ -24,6 +24,7 @@ class KampanyeSosial extends Model
         'judul_kampanye',
         'deskripsi',
         'target_donasi',
+        'terkumpul',
         'foto_sampul',
         'deadline',
         'status',

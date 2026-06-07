@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $detail = $kampanye;
+@endphp
 <div class="max-w-container-max mx-auto px-gutter pt-[120px] pb-xl">
 
     <div class="flex items-center gap-xs mb-lg font-caption text-caption text-on-surface-variant">

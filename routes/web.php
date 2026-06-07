@@ -7,6 +7,13 @@ use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\ProfilDonaturController;
 use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\PengelolaAdminController;
+use App\Http\Controllers\PengelolaDashboardController;
+use App\Http\Controllers\PengelolaDonasiController;
+use App\Http\Controllers\PengelolaDonaturController;
+use App\Http\Controllers\PengelolaKampanyeController;
+use App\Http\Controllers\PengelolaLaporanController;
+use App\Http\Controllers\PengelolaPenerimaController;
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
@@ -32,9 +39,19 @@ Route::get('/donatur/dashboard', function () {
     return 'Dashboard Donatur';
 })->middleware('donatur');
 
-Route::get('/pengelola/dashboard', function () {
-    return 'Dashboard Pengelola';
-})->middleware('pengelola');
+Route::middleware('pengelola')->prefix('pengelola')->name('pengelola.')->group(function () {
+    Route::get('/dashboard', [PengelolaDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/donasi', [PengelolaDonasiController::class, 'index'])->name('donasi.index');
+    Route::get('/donasi/{id}', [PengelolaDonasiController::class, 'show'])->name('donasi.show');
+    Route::put('/donasi/{id}/status', [PengelolaDonasiController::class, 'updateStatus'])->name('donasi.update-status');
+
+    Route::resource('kampanye', PengelolaKampanyeController::class);
+    Route::resource('penerima', PengelolaPenerimaController::class);
+    Route::resource('laporan', PengelolaLaporanController::class);
+    Route::resource('donatur', PengelolaDonaturController::class);
+    Route::resource('admin', PengelolaAdminController::class);
+});
 
 
 // ROUTE INCREMENT 4 (Publik)

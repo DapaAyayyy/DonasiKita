@@ -74,6 +74,54 @@
                     </div>
                 @endif
             </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 p-md">
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">forum</span>
+                    Dukungan Donatur
+                </h2>
+                <div class="h-px w-full bg-outline-variant/30 mb-sm"></div>
+
+                @php
+                    // Filter: Hanya donasi BERHASIL yang memiliki KOMENTAR (Feedback)
+                    $dukunganList = isset($detail->donasi) ? $detail->donasi->filter(function($d) {
+                        return strtolower($d->status_donasi) === 'berhasil' && !empty($d->feedback) && !empty($d->feedback->komentar);
+                    }) : collect();
+                @endphp
+
+                @if($dukunganList->count() > 0)
+                    <div class="flex flex-col gap-sm">
+                        @foreach($dukunganList as $donasi)
+                            @php
+                                $namaDonatur = $donasi->donatur->nama ?? 'Donatur';
+                                $komentar = $donasi->feedback->komentar;
+                                $tanggal = isset($donasi->feedback->tanggal_feedback) ? \Carbon\Carbon::parse($donasi->feedback->tanggal_feedback)->format('d M Y') : '';
+                            @endphp
+                            <div class="p-sm bg-surface-container-low rounded-xl border border-outline-variant/20">
+                                <div class="flex items-center gap-sm mb-xs">
+                                    <div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold text-xs flex-shrink-0">
+                                        {{ strtoupper(substr($namaDonatur, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <p class="font-label-md text-label-md text-on-surface">{{ $namaDonatur }}</p>
+                                        <p class="font-caption text-caption text-on-surface-variant">{{ $tanggal }}</p>
+                                    </div>
+                                </div>
+                                <p class="font-body-md text-body-md text-on-surface-variant italic">
+                                    "{{ $komentar }}"
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="flex flex-col items-center py-md text-outline-variant">
+                        <span class="material-symbols-outlined text-[48px] mb-xs">chat_bubble_outline</span>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Belum ada pesan dukungan.</p>
+                        <p class="font-caption text-caption text-on-surface-variant">Berikan dukunganmu saat melakukan donasi!</p>
+                    </div>
+                @endif
+            </div>
+
         </div>
 
         <div class="lg:col-span-2">
@@ -119,9 +167,11 @@
 
                 <div class="h-px w-full bg-outline-variant/30 mb-md"></div>
 
+                {{-- CEK APAKAH YANG LOGIN ADALAH DONATUR --}}
                 @if(session('auth_type') === 'donatur')
                     <form action="{{ route('donasi.store', $detail->id_kampanye) }}" method="POST" class="mb-sm">
                         @csrf
+                        
                         <label for="nominal" class="block font-label-md text-label-md text-on-surface mb-xs">
                             Nominal Donasi
                         </label>
@@ -132,13 +182,28 @@
                             min="10000"
                             step="1000"
                             value="{{ old('nominal') }}"
-                            placeholder="Masukkan nominal donasi"
+                            placeholder="Masukkan nominal donasi (Min. 10.000)"
                             required
-                            class="w-full px-sm py-sm mb-xs rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full px-sm py-sm mb-sm rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40"
                         >
                         @error('nominal')
-                            <p class="font-caption text-caption text-error mb-xs">{{ $message }}</p>
+                            <p class="font-caption text-caption text-error -mt-sm mb-sm">{{ $message }}</p>
                         @enderror
+
+                        <label for="komentar" class="block font-label-md text-label-md text-on-surface mb-xs">
+                            Pesan dukungan (opsional)
+                        </label>
+                        <textarea
+                            id="komentar"
+                            name="komentar"
+                            rows="3"
+                            placeholder="Tulis doa atau dukungan untuk kampanye ini..."
+                            class="w-full px-sm py-sm mb-md rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+                        >{{ old('komentar') }}</textarea>
+                        @error('komentar')
+                            <p class="font-caption text-caption text-error -mt-md mb-md">{{ $message }}</p>
+                        @enderror
+
                         <button type="submit" class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 flex justify-center items-center gap-xs text-[16px]">
                             <span class="material-symbols-outlined fill">favorite</span> Sumbang Sekarang
                         </button>
@@ -164,7 +229,7 @@
                 @endif
 
                 <a href="/kampanye"
-                   class="w-full py-sm border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded-full hover:bg-surface-container transition-colors flex justify-center items-center gap-xs">
+                   class="w-full py-sm border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded-full hover:bg-surface-container transition-colors flex justify-center items-center gap-xs mt-xs">
                     <span class="material-symbols-outlined text-[18px]">arrow_back</span> Kembali ke Daftar
                 </a>
             </div>

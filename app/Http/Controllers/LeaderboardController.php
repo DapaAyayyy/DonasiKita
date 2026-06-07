@@ -18,6 +18,17 @@ class LeaderboardController extends Controller
             ->take(10)
             ->get();
 
-        return view('leaderboard.index', compact('leaderboard'));
+        $totalKampanye = DB::table('kampanye_sosial')->count();
+        $totalDonatur = DB::table('donatur')->count();
+        $totalDana = DB::table('donasi')
+            ->where('status_donasi', 'berhasil')
+            ->sum('nominal');
+
+        return view('leaderboard.index', compact(
+            'leaderboard',
+            'totalKampanye',
+            'totalDonatur',
+            'totalDana'
+        ));
     }
 }

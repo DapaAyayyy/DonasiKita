@@ -83,7 +83,7 @@
 
                 <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 hover:shadow-soft-2 transition-shadow overflow-hidden flex flex-col group">
                     <div class="relative h-48 overflow-hidden">
-                        <img alt="{{ $kampanye->judul ?? 'Kampanye' }}" 
+                        <img alt="{{ $kampanye->judul_kampanye ?? 'Kampanye' }}" 
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                             src="{{ !empty($kampanye->foto_sampul) ? asset('assets/images/' . $kampanye->foto_sampul) : 'https://placehold.co/600x400?text=Belum+Ada+Sampul' }}">
                         @if(($kampanye->status ?? '') === 'mendesak')
@@ -109,7 +109,7 @@
                                     <span class="material-symbols-outlined text-[16px]">track_changes</span> Target: Rp {{ number_format($target, 0, ',', '.') }}
                                 </div>
                             </div>
-                            <a href="/kampanye/{{ $kampanye->id ?? '#' }}" class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
+                            <a href="/kampanye/{{ $kampanye->id_kampanye ?? '#' }}" class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
                                 <span class="material-symbols-outlined fill text-[18px]">favorite</span> Donasi Sekarang
                             </a>
                         </div>

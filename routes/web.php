@@ -2,13 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KampanyeSosialController;
-use App\Http\Controllers\AuthController; 
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LeaderboardController; // Tambahan Increment 4
+use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\RiwayatController; // Tambahan untuk Riwayat
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
 Route::get('/kampanye', [KampanyeSosialController::class, 'index']);
 Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
+Route::post('/kampanye/{id}/donasi', [DonasiController::class, 'store'])
+    ->middleware('donatur')
+    ->name('donasi.store');
 
 
 // ROUTE INCREMENT 2 (Auth Donatur & Pengelola)
@@ -18,7 +23,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Sementara (Diberi Middleware)
 Route::get('/donatur/dashboard', function () {
@@ -28,7 +33,15 @@ Route::get('/donatur/dashboard', function () {
 Route::get('/pengelola/dashboard', function () {
     return 'Dashboard Pengelola';
 })->middleware('pengelola');
-// Route untuk Detail Kampanye
-Route::get('/kampanye/{id}', [KampanyeSosialController::class, 'show']);
 
-Route::get('/login', function () {return view('auth.login');});
+
+//Midtrans route
+Route::post('/midtrans/callback', [DonasiController::class, 'callback'])
+      ->name('midtrans.callback');
+
+
+// ROUTE INCREMENT 4 (Publik & Donatur)
+Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
+
+// Area Donatur di Main Web (Riwayat)
+Route::get('/riwayat-donasi', [RiwayatController::class, 'index'])->name('donatur.riwayat');

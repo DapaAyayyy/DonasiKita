@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 
 class KampanyeSosialController extends Controller
 {
-
-// Method untuk Landing Page (Route: /)
+    // Method untuk Landing Page (Route: /)
     public function home()
     {
         $kampanyes = KampanyeSosial::with('penerima')
@@ -27,20 +26,39 @@ class KampanyeSosialController extends Controller
     }
 
     // Method untuk Daftar Kampanye (Route: /kampanye)
-    public function index()
+    public function index(Request $request)
     {
-        $kampanye = KampanyeSosial::with('penerima')
-            ->orderBy('tanggal_dibuat', 'desc')
-            ->get();
+        $kategori = strtolower((string) $request->query('kategori', ''));
+        $search = trim((string) $request->query('q', ''));
 
-        return view('kampanye.index', compact('kampanye'));
+        $query = KampanyeSosial::with('penerima');
+
+        if ($kategori !== '') {
+            $query->whereHas('penerima', function ($penerimaQuery) use ($kategori) {
+                $penerimaQuery->whereRaw('LOWER(kategori_penerima) = ?', [$kategori]);
+            });
+        }
+
+        if ($search !== '') {
+            $query->where(function ($kampanyeQuery) use ($search) {
+                $kampanyeQuery->where('judul_kampanye', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhereHas('penerima', function ($penerimaQuery) use ($search) {
+                        $penerimaQuery->where('nama', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $kampanye = $query->orderBy('tanggal_dibuat', 'desc')->get();
+
+        return view('kampanye.index', compact('kampanye', 'kategori', 'search'));
     }
 
     // Route: /kampanye/{id}
     public function show($id)
     {
-        $kampanye = KampanyeSosial::with(['penerima', 'donasi'])->findOrFail($id);
+        $kampanye = KampanyeSosial::with(['penerima', 'donasi.donatur'])->findOrFail($id);
 
-        return view('kampanye.show', compact('kampanye'));
+        return view('kampanye.show', ['detail' => $kampanye]);
     }
 }

@@ -47,6 +47,7 @@
                 <img alt="DonasiKita Logo" class="h-[48px] py-1 w-auto object-contain group-hover:scale-105 transition-transform" 
                     src="{{ asset('assets/icons/donasikitaicon.png') }}">
             </a>            
+            
             <div class="hidden md:flex items-center gap-lg">
                 <a class="flex items-center gap-xs {{ request()->is('/') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/">
                     <span class="material-symbols-outlined fill">home</span>
@@ -63,16 +64,39 @@
                     <span class="font-label-md text-label-md">Leaderboard</span>
                 </a>
 
+                {{-- TAMPILKAN MENU RIWAYAT JIKA SUDAH LOGIN --}}
+                @if(session()->has('auth_id'))
                 <a class="flex items-center gap-xs {{ request()->is('riwayat-donasi') ? 'text-primary font-bold border-b-2 border-[#84cc16]' : 'text-on-surface-variant hover:text-primary' }} transition-colors pb-1" href="/riwayat-donasi">
                     <span class="material-symbols-outlined">receipt_long</span>
                     <span class="font-label-md text-label-md">Riwayat</span>
                 </a>
+                @endif
             </div>
             
-            <!-- Perbaikan: Tombol Login & Daftar di Navbar sekarang menggunakan <a> -->
             <div class="flex items-center gap-sm">
-                <a href="/login" class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">Login</a>
-                <a href="/register" class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary"><span class="material-symbols-outlined">person_add</span>Daftar</a>
+                
+                {{-- JIKA SUDAH LOGIN (Sesi Aktif) --}}
+                @if(session()->has('auth_id'))
+                    <div class="flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
+                        <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
+                        {{ session('auth_name') }}
+                    </div>
+                    
+                    {{-- DI SINI LETAK PERUBAHANNYA: TOMBOL LOGOUT ASLI (POST) --}}
+                    <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-xs px-md py-sm text-white font-bold text-sm rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-[#c81e1e]">
+                            <span class="material-symbols-outlined text-[18px]">logout</span>
+                            Logout
+                        </button>
+                    </form>
+
+                {{-- JIKA BELUM LOGIN --}}
+                @else
+                    <a href="/login" class="hidden md:flex items-center gap-xs px-sm py-sm text-primary font-label-md text-label-md hover:bg-surface-container-high/50 rounded-full transition-colors">Login</a>
+                    <a href="/register" class="flex items-center gap-xs px-md py-sm text-white font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 bg-primary"><span class="material-symbols-outlined">person_add</span>Daftar</a>
+                @endif
+
             </div>
         </div>
     </nav>

@@ -29,7 +29,7 @@ class AuthController extends Controller
         $donatur = Donatur::where('email', $request->email)->first();
 
         // Pengecekan menggunakan Hash::check sesuai instruksi Increment 2
-        if ($donatur && Hash::check($request->password, $donatur->password_hash)) {
+          if ($donatur && $this->passwordMatches($request->password, $donatur->password_hash, $donatur)) {
             $request->session()->regenerate();
 
             // Simpan Session Donatur
@@ -39,14 +39,14 @@ class AuthController extends Controller
                 'auth_name' => $donatur->nama,
             ]);
 
-            return redirect('/donatur/dashboard');
+            return redirect()->intended('/kampanye');
         }
 
         // SKENARIO B: Cek Login Pengelola
 
         $pengelola = Pengelola::where('email', $request->email)->first();
 
-        if ($pengelola && Hash::check($request->password, $pengelola->password_hash)) {
+          if ($pengelola && $this->passwordMatches($request->password, $pengelola->password_hash, $pengelola)) {
             $request->session()->regenerate();
 
             // Simpan Session Pengelola
@@ -57,7 +57,7 @@ class AuthController extends Controller
                 'auth_role' => $pengelola->role,
             ]);
 
-            return redirect('/pengelola/dashboard');
+            return redirect()->intended('/pengelola/dashboard');
         }
 
         // JIKA GAGAL LOGIN
@@ -67,14 +67,13 @@ class AuthController extends Controller
     // 3. Proses Logout
     public function logout(Request $request)
     {
-        // Hapus semua data session dan token lama
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 
-    // --- TARUH METHOD TUGASMU DI SINI ---
+    // 4. Showregister dan Register
 
     public function showRegister()
     {
@@ -83,18 +82,44 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
+        $validated = $request->validate([
+            'nama' => 'required|string|max:100',
             'email' => 'required|email|unique:donatur,email',
-            'password' => 'required|min:6',
+            'no_hp' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'password' => 'required|min:6|confirmed',
+            'terms' => 'accepted',
         ]);
 
         Donatur::create([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'password_hash' => Hash::make($request->password),
+            'nama' => $validated['nama'],
+            'email' => $validated['email'],
+            'no_hp' => $validated['no_hp'] ?? null,
+            'alamat' => $validated['alamat'] ?? null,
+            'password_hash' => Hash::make($validated['password']),
         ]);
 
         return redirect('/login')->with('success', 'Registrasi berhasil, silakan login.');
     }
+      private function passwordMatches(string $password, ?string $storedPassword, $user): bool
+  {
+      if (empty($storedPassword)) {
+          return false;
+      }
+
+      $hashInfo = password_get_info($storedPassword);
+
+      if (($hashInfo['algoName'] ?? 'unknown') === 'bcrypt') {
+          return Hash::check($password, $storedPassword);
+      }
+
+      // Fallback sementara untuk data lama/manual yang password-nya belum di-hash.
+      // Setelah berhasil login, password langsung di-upgrade menjadi bcrypt.
+      if (hash_equals($storedPassword, $password)) {
+          $user->password_hash = Hash::make($password);
+          return true;
+      }
+
+      return false;
+  }
 }

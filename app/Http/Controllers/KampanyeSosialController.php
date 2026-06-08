@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donatur;
-use App\Models\Donasi;
+use App\Models\Feedback;
 use App\Models\KampanyeSosial;
 use Illuminate\Http\Request;
 
@@ -58,23 +58,45 @@ class KampanyeSosialController extends Controller
     // Route: /kampanye/{id}
     public function show($id)
     {
-        $kampanye = KampanyeSosial::findOrFail($id);
         $kampanye = KampanyeSosial::with([
             'penerima',
+            'laporan' => function ($query) {
+                $query->orderByDesc('tanggal_dibuat')
+                    ->orderByDesc('id_laporan');
+            },
             'donasi' => function ($query) {
                 $query->where('status_donasi', 'berhasil')
-                    ->orderByDesc('tanggal_donasi');
+                    ->orderByDesc('tanggal_donasi')
+                    ->orderByDesc('id_donasi')
+                    ->limit(5);
             },
             'donasi.donatur',
         ])->findOrFail($id);
 
-        // Tarik feedback dari donasi yang statusnya berhasil
-        $feedbacks = Donasi::with(['donatur', 'feedback'])
-            ->where('id_kampanye', $id)
+        $totalRiwayatDonasi = $kampanye->donasi()
             ->where('status_donasi', 'berhasil')
-            ->whereHas('feedback') // Hanya ambil donasi yang punya feedback
+            ->count();
+
+        // Tarik pesan dukungan dari feedback donasi yang sudah berhasil.
+        $feedbackQuery = Feedback::with('donasi.donatur')
+            ->whereHas('donasi', function ($query) use ($id) {
+                $query->where('id_kampanye', $id)
+                    ->where('status_donasi', 'berhasil');
+            });
+
+        $totalDukungan = (clone $feedbackQuery)->count();
+
+        $feedbacks = $feedbackQuery
+            ->orderByDesc('tanggal_feedback')
+            ->orderByDesc('id_feedback')
+            ->limit(5)
             ->get();
 
-        return view('kampanye.show', compact('kampanye', 'feedbacks'));
+        return view('kampanye.show', compact(
+            'kampanye',
+            'feedbacks',
+            'totalRiwayatDonasi',
+            'totalDukungan'
+        ));
     }
 }

@@ -1,12 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\KampanyeSosialController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\LeaderboardController;
-use App\Http\Controllers\ProfilDonaturController;
 use App\Http\Controllers\DonasiController;
-use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\KampanyeSosialController;
+use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\PengelolaAdminController;
 use App\Http\Controllers\PengelolaDashboardController;
 use App\Http\Controllers\PengelolaDonasiController;
@@ -14,6 +11,9 @@ use App\Http\Controllers\PengelolaDonaturController;
 use App\Http\Controllers\PengelolaKampanyeController;
 use App\Http\Controllers\PengelolaLaporanController;
 use App\Http\Controllers\PengelolaPenerimaController;
+use App\Http\Controllers\ProfilDonaturController;
+use App\Http\Controllers\RiwayatController;
+use Illuminate\Support\Facades\Route;
 
 // ROUTE INCREMENT 1 (Publik & Kampanye)
 Route::get('/', [KampanyeSosialController::class, 'home']);
@@ -23,6 +23,11 @@ Route::post('/kampanye/{id}/donasi', [DonasiController::class, 'store'])
     ->middleware('donatur')
     ->name('donasi.store');
 
+// Halaman informasi publik
+Route::view('/tentang-kami', 'tentang-kami')->name('tentang-kami');
+Route::view('/hubungi-kami', 'hubungi-kami')->name('hubungi-kami');
+Route::view('/kebijakan-privasi', 'kebijakan-privasi')->name('kebijakan-privasi');
+Route::view('/syarat-ketentuan', 'syarat-ketentuan')->name('syarat-ketentuan');
 
 // ROUTE INCREMENT 2 (Auth Donatur & Pengelola)
 // Auth Routes
@@ -32,7 +37,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 
 // Dashboard Sementara (Diberi Middleware)
 Route::get('/donatur/dashboard', function () {
@@ -50,9 +54,8 @@ Route::middleware('pengelola')->prefix('pengelola')->name('pengelola.')->group(f
     Route::resource('penerima', PengelolaPenerimaController::class);
     Route::resource('laporan', PengelolaLaporanController::class);
     Route::resource('donatur', PengelolaDonaturController::class);
-    Route::resource('admin', PengelolaAdminController::class);
+    Route::resource('admin', PengelolaAdminController::class)->middleware('admin_utama');
 });
-
 
 Route::middleware('donatur')->group(function () {
     Route::get('/profil', [ProfilDonaturController::class, 'show'])->name('donatur.profil');
@@ -61,8 +64,7 @@ Route::middleware('donatur')->group(function () {
 });
 // Midtrans route
 Route::post('/midtrans/callback', [DonasiController::class, 'callback'])
-      ->name('midtrans.callback');
-
+    ->name('midtrans.callback');
 
 // ROUTE INCREMENT 4 (Publik & Donatur)
 // Area Publik (Leaderboard)

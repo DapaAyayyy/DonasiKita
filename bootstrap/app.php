@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'donatur' => \App\Http\Middleware\CheckDonatur::class,
             'pengelola' => \App\Http\Middleware\CheckPengelola::class,
+            'admin_utama' => \App\Http\Middleware\CheckAdminUtama::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

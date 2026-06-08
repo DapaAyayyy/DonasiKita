@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pengelola;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class PengelolaAdminController extends Controller
 {
@@ -81,7 +82,7 @@ class PengelolaAdminController extends Controller
             'nama' => 'required|string|max:100',
             'email' => 'required|email|unique:pengelola,email,' . $ignoreId . ',id_pengelola',
             'no_hp' => 'nullable|string|max:20',
-            'role' => 'required|string|max:50',
+            'role' => ['required', Rule::in(['pengelola', 'admin_utama', 'super_admin'])],
             'status' => 'required|in:aktif,nonaktif',
             'password' => ($ignoreId ? 'nullable' : 'required') . '|string|min:6',
         ]);

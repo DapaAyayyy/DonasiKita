@@ -96,6 +96,7 @@ class PengelolaBackofficeTest extends TestCase
         Schema::create('feedback', function (Blueprint $table): void {
             $table->increments('id_feedback');
             $table->text('komentar');
+            $table->dateTime('tanggal_feedback')->nullable();
             $table->integer('id_donasi')->nullable();
         });
 
@@ -135,6 +136,81 @@ class PengelolaBackofficeTest extends TestCase
         $response->assertSee('Kelola Kampanye');
     }
 
+    public function test_admin_crud_is_only_accessible_by_admin_utama(): void
+    {
+        $this->withPengelolaSession('pengelola')
+            ->get('/pengelola/admin')
+            ->assertForbidden();
+
+        $this->withPengelolaSession('pengelola')
+            ->post('/pengelola/admin', [
+                'nama' => 'Admin Ilegal',
+                'email' => 'admin-ilegal@example.test',
+                'no_hp' => '08111111111',
+                'role' => 'super_admin',
+                'status' => 'aktif',
+                'password' => 'secret123',
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('pengelola', [
+            'email' => 'admin-ilegal@example.test',
+        ]);
+
+        $this->withPengelolaSession('super_admin')
+            ->get('/pengelola/admin')
+            ->assertOk()
+            ->assertSee('Admin Test');
+    }
+
+    public function test_admin_form_uses_fixed_role_options_and_rejects_unknown_role(): void
+    {
+        $this->withPengelolaSession('super_admin')
+            ->get('/pengelola/admin/create')
+            ->assertOk()
+            ->assertSee('name="role"', false)
+            ->assertSee('value="pengelola"', false)
+            ->assertSee('value="admin_utama"', false);
+
+        $this->withPengelolaSession('super_admin')
+            ->post('/pengelola/admin', [
+                'nama' => 'Role Aneh',
+                'email' => 'role-aneh@example.test',
+                'no_hp' => '08111111111',
+                'role' => 'admin_bebas',
+                'status' => 'aktif',
+                'password' => 'secret123',
+            ])
+            ->assertSessionHasErrors('role');
+
+        $this->assertDatabaseMissing('pengelola', [
+            'email' => 'role-aneh@example.test',
+        ]);
+    }
+
+    public function test_admin_menu_is_hidden_for_regular_pengelola(): void
+    {
+        $regularResponse = $this->withPengelolaSession('pengelola')
+            ->get('/pengelola/dashboard')
+            ->assertOk();
+
+        preg_match('/<nav class="p-4 flex lg:flex-col gap-2 overflow-x-auto">(.*?)<\/nav>/s', $regularResponse->getContent(), $regularMatches);
+
+        $this->assertNotEmpty($regularMatches);
+        $this->assertStringNotContainsString('pengelola/admin', $regularMatches[1]);
+        $this->assertStringNotContainsString('Admin', $regularMatches[1]);
+
+        $adminUtamaResponse = $this->withPengelolaSession('super_admin')
+            ->get('/pengelola/dashboard')
+            ->assertOk();
+
+        preg_match('/<nav class="p-4 flex lg:flex-col gap-2 overflow-x-auto">(.*?)<\/nav>/s', $adminUtamaResponse->getContent(), $adminMatches);
+
+        $this->assertNotEmpty($adminMatches);
+        $this->assertStringContainsString('pengelola/admin', $adminMatches[1]);
+        $this->assertStringContainsString('Admin', $adminMatches[1]);
+    }
+
     public function test_public_campaign_detail_displays_campaign_data(): void
     {
         $this->get('/kampanye/1')
@@ -142,7 +218,45 @@ class PengelolaBackofficeTest extends TestCase
             ->assertSee('Kampanye Test')
             ->assertSee('Deskripsi kampanye')
             ->assertSee('Penerima Test')
+            ->assertSee('Laporan Minggu Ini')
+            ->assertSee('Dana sudah disalurkan tahap pertama')
+            ->assertSee('Semoga lancar terus')
             ->assertSee('assets/images/sampul-test.jpg');
+    }
+
+    public function test_public_campaign_detail_limits_donation_history_and_support_to_latest_five(): void
+    {
+        for ($i = 1; $i <= 6; $i++) {
+            DB::table('donasi')->insert([
+                'id_donasi' => 2 + $i,
+                'id_donatur' => 1,
+                'id_kampanye' => 1,
+                'id_metode' => 1,
+                'nominal' => 50000 + ($i * 10000),
+                'tanggal_donasi' => now()->addMinutes($i),
+                'status_donasi' => 'berhasil',
+                'midtrans_order_id' => null,
+                'midtrans_transaction_id' => null,
+                'payment_type' => null,
+                'paid_at' => now()->addMinutes($i),
+            ]);
+
+            DB::table('feedback')->insert([
+                'id_feedback' => 1 + $i,
+                'id_donasi' => 2 + $i,
+                'komentar' => "Dukungan terbaru {$i}",
+                'tanggal_feedback' => now()->addMinutes($i),
+            ]);
+        }
+
+        $this->get('/kampanye/1')
+            ->assertOk()
+            ->assertSee('Rp 110.000')
+            ->assertDontSee('Rp 60.000')
+            ->assertSee('Dukungan terbaru 6')
+            ->assertDontSee('Dukungan terbaru 1')
+            ->assertSee('Menampilkan 5 dari 7 donasi terbaru.')
+            ->assertSee('Menampilkan 5 dari 7 dukungan terbaru.');
     }
 
     public function test_pengelola_can_update_donation_status_and_recalculate_campaign_total(): void
@@ -158,13 +272,13 @@ class PengelolaBackofficeTest extends TestCase
         $this->assertEquals(150000, (float) DB::table('kampanye_sosial')->where('id_kampanye', 1)->value('terkumpul'));
     }
 
-    private function withPengelolaSession(): self
+    private function withPengelolaSession(string $role = 'super_admin'): self
     {
         return $this->withSession([
             'auth_type' => 'pengelola',
             'auth_id' => 1,
             'auth_name' => 'Admin Test',
-            'auth_role' => 'super_admin',
+            'auth_role' => $role,
         ]);
     }
 
@@ -240,6 +354,23 @@ class PengelolaBackofficeTest extends TestCase
                 'payment_type' => null,
                 'paid_at' => now(),
             ],
+        ]);
+
+        DB::table('laporan')->insert([
+            'id_laporan' => 1,
+            'id_kampanye' => 1,
+            'id_pengelola' => 1,
+            'judul_laporan' => 'Laporan Minggu Ini',
+            'isi_laporan' => 'Dana sudah disalurkan tahap pertama',
+            'file_lampiran' => null,
+            'tanggal_dibuat' => now(),
+        ]);
+
+        DB::table('feedback')->insert([
+            'id_feedback' => 1,
+            'id_donasi' => 2,
+            'komentar' => 'Semoga lancar terus',
+            'tanggal_feedback' => now(),
         ]);
     }
 }

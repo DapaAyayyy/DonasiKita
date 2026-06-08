@@ -39,6 +39,63 @@
 
             <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 p-md">
                 <h2 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-tertiary">article</span>
+                    Laporan Perkembangan
+                </h2>
+                <div class="h-px w-full bg-outline-variant/30 mb-sm"></div>
+
+                @if(isset($detail->laporan) && $detail->laporan->count() > 0)
+                    <div class="flex flex-col gap-sm">
+                        @foreach($detail->laporan as $laporan)
+                            @php
+                                $tanggalLaporan = !empty($laporan->tanggal_dibuat)
+                                    ? \Carbon\Carbon::parse($laporan->tanggal_dibuat)->format('d M Y')
+                                    : '';
+                            @endphp
+                            <article class="p-sm bg-surface-container-low rounded-xl border border-outline-variant/20">
+                                <div class="flex items-start justify-between gap-sm mb-xs">
+                                    <h3 class="font-label-md text-label-md text-on-surface">
+                                        {{ $laporan->judul_laporan ?? 'Laporan Kampanye' }}
+                                    </h3>
+                                    @if($tanggalLaporan)
+                                        <span class="font-caption text-caption text-on-surface-variant whitespace-nowrap">
+                                            {{ $tanggalLaporan }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                @if(!empty($laporan->isi_laporan))
+                                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed whitespace-pre-line">
+                                        {{ $laporan->isi_laporan }}
+                                    </p>
+                                @else
+                                    <p class="font-body-md text-body-md text-on-surface-variant">
+                                        Belum ada detail laporan.
+                                    </p>
+                                @endif
+
+                                @if(!empty($laporan->file_lampiran))
+                                    <a href="{{ asset('assets/images/' . $laporan->file_lampiran) }}"
+                                       target="_blank"
+                                       class="inline-flex items-center gap-xs mt-sm font-label-md text-label-md text-primary hover:underline">
+                                        <span class="material-symbols-outlined text-[18px]">attach_file</span>
+                                        Lihat lampiran
+                                    </a>
+                                @endif
+                            </article>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="flex flex-col items-center py-md text-outline-variant">
+                        <span class="material-symbols-outlined text-[48px] mb-xs">article</span>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Belum ada laporan perkembangan.</p>
+                        <p class="font-caption text-caption text-on-surface-variant">Laporan akan tampil setelah pengelola mempublikasikannya.</p>
+                    </div>
+                @endif
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 p-md">
+                <h2 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-xs">
                     <span class="material-symbols-outlined text-secondary">history</span>
                     Riwayat Donasi
                 </h2>
@@ -69,6 +126,9 @@
                             </div>
                         @endforeach
                     </div>
+                    <p class="font-caption text-caption text-on-surface-variant mt-sm">
+                        Menampilkan {{ $detail->donasi->count() }} dari {{ $totalRiwayatDonasi ?? $detail->donasi->count() }} donasi terbaru.
+                    </p>
                 @else
                     <div class="flex flex-col items-center py-md text-outline-variant">
                         <span class="material-symbols-outlined text-[48px] mb-xs">inbox</span>
@@ -85,20 +145,14 @@
                 </h2>
                 <div class="h-px w-full bg-outline-variant/30 mb-sm"></div>
 
-                @php
-                    // Filter: Hanya donasi BERHASIL yang memiliki KOMENTAR (Feedback)
-                    $dukunganList = isset($detail->donasi) ? $detail->donasi->filter(function($d) {
-                        return strtolower($d->status_donasi) === 'berhasil' && !empty($d->feedback) && !empty($d->feedback->komentar);
-                    }) : collect();
-                @endphp
-
-                @if($dukunganList->count() > 0)
+                @if(isset($feedbacks) && $feedbacks->count() > 0)
                     <div class="flex flex-col gap-sm">
-                        @foreach($dukunganList as $donasi)
+                        @foreach($feedbacks as $feedback)
                             @php
-                                $namaDonatur = $donasi->donatur->nama ?? 'Donatur';
-                                $komentar = $donasi->feedback->komentar;
-                                $tanggal = isset($donasi->feedback->tanggal_feedback) ? \Carbon\Carbon::parse($donasi->feedback->tanggal_feedback)->format('d M Y') : '';
+                                $namaDonatur = $feedback->donasi->donatur->nama ?? 'Donatur';
+                                $tanggal = !empty($feedback->tanggal_feedback)
+                                    ? \Carbon\Carbon::parse($feedback->tanggal_feedback)->format('d M Y')
+                                    : '';
                             @endphp
                             <div class="p-sm bg-surface-container-low rounded-xl border border-outline-variant/20">
                                 <div class="flex items-center gap-sm mb-xs">
@@ -111,11 +165,14 @@
                                     </div>
                                 </div>
                                 <p class="font-body-md text-body-md text-on-surface-variant italic">
-                                    "{{ $komentar }}"
+                                    "{{ $feedback->komentar }}"
                                 </p>
                             </div>
                         @endforeach
                     </div>
+                    <p class="font-caption text-caption text-on-surface-variant mt-sm">
+                        Menampilkan {{ $feedbacks->count() }} dari {{ $totalDukungan ?? $feedbacks->count() }} dukungan terbaru.
+                    </p>
                 @else
                     <div class="flex flex-col items-center py-md text-outline-variant">
                         <span class="material-symbols-outlined text-[48px] mb-xs">chat_bubble_outline</span>
@@ -128,7 +185,7 @@
         </div>
 
         <div class="lg:col-span-2">
-            <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 p-md sticky top-[100px]">
+            <div class="bg-surface-container-lowest rounded-2xl shadow-soft-1 p-md lg:sticky lg:top-[100px] lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
                 
                 <h1 class="font-headline-lg text-headline-lg text-on-surface mb-md leading-snug">{{ $detail->judul_kampanye ?? 'Judul Tidak Tersedia' }}</h1>
 
@@ -208,7 +265,7 @@
                         @enderror
 
                         <button type="submit" class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-soft-1 hover:shadow-soft-2 hover:opacity-90 transition-all active:scale-95 flex justify-center items-center gap-xs text-[16px]">
-                            <span class="material-symbols-outlined fill">favorite</span> Sumbang Sekarang
+                            <span class="material-symbols-outlined fill">favorite</span> Donasi Sekarang
                         </button>
                     </form>
                 @else

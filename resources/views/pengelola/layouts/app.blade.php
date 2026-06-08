@@ -19,6 +19,7 @@
 </head>
 <body class="bg-[#F6F8FF] text-[#0B132A] min-h-screen">
 @php
+    $isAdminUtama = in_array(strtolower((string) session('auth_role')), ['super_admin', 'admin_utama'], true);
     $navItems = [
         ['route' => 'pengelola.dashboard', 'active' => ['pengelola.dashboard'], 'icon' => 'dashboard', 'label' => 'Dashboard'],
         ['route' => 'pengelola.donasi.index', 'active' => ['pengelola.donasi.*'], 'icon' => 'payments', 'label' => 'Donasi'],
@@ -26,8 +27,11 @@
         ['route' => 'pengelola.penerima.index', 'active' => ['pengelola.penerima.*'], 'icon' => 'volunteer_activism', 'label' => 'Penerima'],
         ['route' => 'pengelola.laporan.index', 'active' => ['pengelola.laporan.*'], 'icon' => 'article', 'label' => 'Laporan'],
         ['route' => 'pengelola.donatur.index', 'active' => ['pengelola.donatur.*'], 'icon' => 'group', 'label' => 'Donatur'],
-        ['route' => 'pengelola.admin.index', 'active' => ['pengelola.admin.*'], 'icon' => 'admin_panel_settings', 'label' => 'Admin'],
     ];
+
+    if ($isAdminUtama) {
+        $navItems[] = ['route' => 'pengelola.admin.index', 'active' => ['pengelola.admin.*'], 'icon' => 'admin_panel_settings', 'label' => 'Admin'];
+    }
 @endphp
 <div class="min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
     <aside class="bg-white border-r border-slate-200 lg:min-h-screen sticky top-0 z-30">

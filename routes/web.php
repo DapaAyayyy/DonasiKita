@@ -54,9 +54,6 @@ Route::middleware('pengelola')->prefix('pengelola')->name('pengelola.')->group(f
 });
 
 
-// ROUTE INCREMENT 4 (Publik)
-Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
-
 Route::middleware('donatur')->group(function () {
     Route::get('/profil', [ProfilDonaturController::class, 'show'])->name('donatur.profil');
     Route::put('/profil', [ProfilDonaturController::class, 'update'])->name('donatur.profil.update');

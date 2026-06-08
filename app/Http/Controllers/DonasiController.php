@@ -47,7 +47,7 @@ class DonasiController extends Controller
             $id_donasi_baru = DB::table('donasi')->insertGetId([
                 'id_donatur' => session('auth_id'),
                 'id_kampanye' => $id_kampanye,
-                'id_metode' => 1, 
+                'id_metode' => null,
                 'nominal' => $nominal,
                 'status_donasi' => 'pending',
                 'tanggal_donasi' => now(),

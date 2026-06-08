@@ -91,7 +91,7 @@
                     Informasi Pribadi
                 </h2>
 
-                <form action="/profil/update" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <form action="{{ route('donatur.profil.update') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     @csrf
                     @method('PUT')
 
@@ -131,7 +131,7 @@
                     Keamanan Akun
                 </h2>
 
-                <form action="/profil/password" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <form action="{{ route('donatur.profil.password') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     @csrf
                     @method('PUT')
 

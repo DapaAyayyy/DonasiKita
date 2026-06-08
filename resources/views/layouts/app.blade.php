@@ -76,14 +76,14 @@
             <div class="hidden md:flex items-center justify-end gap-sm justify-self-end">
                 @if(session('auth_type'))
                     @if(session('auth_type') === 'donatur')
-                        <a href="{{ route('donatur.profil') }}" class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full hover:bg-[#336600] hover:text-white transition-colors cursor-pointer shadow-sm active:scale-95" aria-label="Buka profil {{ session('auth_name') }}">
+                        <a href="{{ route('donatur.profil') }}" class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full hover:bg-[#336600] hover:text-white transition-colors cursor-pointer shadow-sm active:scale-95 max-w-[180px]" aria-label="Buka profil {{ session('auth_name') }}" title="{{ session('auth_name') }}">
                             <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
-                            {{ session('auth_name') }}
+                            <span class="truncate">{{ session('auth_name') }}</span>
                         </a>
                     @else
-                        <div class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full">
+                        <div class="hidden lg:flex items-center gap-xs px-md py-sm bg-surface-container-high text-[#336600] font-label-md text-label-md rounded-full max-w-[180px]" title="{{ session('auth_name') }}">
                             <span class="material-symbols-outlined fill text-[18px]">account_circle</span>
-                            {{ session('auth_name') }}
+                            <span class="truncate">{{ session('auth_name') }}</span>
                         </div>
                     @endif
 
@@ -124,12 +124,13 @@
             
             <!-- Perbaikan: Menghapus tombol login/daftar yang tersasar di footer -->
             <div class="flex flex-wrap justify-center gap-md md:gap-lg font-body-md text-body-md">
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/tentang-kami">Tentang Kami</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="/hubungi-kami">Hubungi Kami</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Kebijakan Privasi</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Syarat & Ketentuan</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="{{ route('tentang-kami') }}">Tentang Kami</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="{{ route('hubungi-kami') }}">Hubungi Kami</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="{{ route('kebijakan-privasi') }}">Kebijakan Privasi</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors" href="{{ route('syarat-ketentuan') }}">Syarat & Ketentuan</a>
             </div>
         </div>
     </footer>
 </body>
 </html>
+

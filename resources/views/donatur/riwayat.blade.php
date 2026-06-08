@@ -46,7 +46,7 @@
                     <div>
                         {{-- Mengambil nama kampanye dari relasi Backend 1 --}}
                         <h3 class="font-['Plus_Jakarta_Sans'] text-[18px] font-bold text-on-surface mb-1 group-hover:text-primary transition-colors line-clamp-1">
-                            {{ $item->kampanye->judul ?? 'Nama Kampanye Tidak Ditemukan' }}
+                            {{ $item->kampanye->judul_kampanye ?? 'Nama Kampanye Tidak Ditemukan' }}
                         </h3>
                         <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-on-surface-variant">
                             <span class="flex items-center gap-1">

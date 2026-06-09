@@ -29,6 +29,34 @@ class KampanyeSosial extends Model
         'deadline',
         'status',
     ];
+
+    public function getKategoriVirtualAttribute(): string
+    {
+        $text = strtolower(implode(' ', [
+            $this->judul_kampanye ?? '',
+            $this->deskripsi ?? '',
+            $this->penerima->nama ?? '',
+            $this->penerima->kategori_penerima ?? '',
+            $this->penerima->deskripsi_kebutuhan ?? '',
+        ]));
+
+        $kategoriMap = [
+            'bencana' => ['banjir', 'longsor', 'kekeringan', 'korban', 'darurat', 'air bersih'],
+            'pendidikan' => ['sekolah', 'pendidikan', 'mahasiswa', 'beasiswa', 'belajar'],
+            'kesehatan' => ['pengobatan', 'penyakit', 'medis', 'obat', 'rumah sakit'],
+        ];
+
+        foreach ($kategoriMap as $kategori => $keywords) {
+            foreach ($keywords as $keyword) {
+                if (str_contains($text, $keyword)) {
+                    return $kategori;
+                }
+            }
+        }
+
+        return 'sosial';
+    }
+
     public function pengelola()
     {
         return $this->belongsTo(Pengelola::class, 'id_pengelola', 'id_pengelola');

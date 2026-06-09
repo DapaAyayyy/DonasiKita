@@ -136,6 +136,91 @@ class PengelolaBackofficeTest extends TestCase
         $response->assertSee('Kelola Kampanye');
     }
 
+    public function test_public_campaign_category_filter_uses_virtual_campaign_category(): void
+    {
+        DB::table('penerima')->insert([
+            [
+                'id_penerima' => 2,
+                'nama' => 'Penerima Sekolah',
+                'kategori_penerima' => 'Sosial',
+                'alamat' => 'Jl. Pendidikan',
+                'deskripsi_kebutuhan' => 'Butuh renovasi ruang kelas',
+            ],
+            [
+                'id_penerima' => 3,
+                'nama' => 'Penerima Banjir',
+                'kategori_penerima' => 'Sosial',
+                'alamat' => 'Jl. Bencana',
+                'deskripsi_kebutuhan' => 'Butuh logistik darurat',
+            ],
+        ]);
+
+        DB::table('kampanye_sosial')->insert([
+            [
+                'id_kampanye' => 2,
+                'id_pengelola' => 1,
+                'id_penerima' => 2,
+                'judul_kampanye' => 'Renovasi Sekolah Desa',
+                'deskripsi' => 'Bantuan pendidikan untuk ruang belajar',
+                'target_donasi' => 2000000,
+                'terkumpul' => 0,
+                'foto_sampul' => null,
+                'tanggal_dibuat' => now()->addMinute(),
+                'deadline' => now()->addMonth()->toDateString(),
+                'status' => 'aktif',
+            ],
+            [
+                'id_kampanye' => 3,
+                'id_pengelola' => 1,
+                'id_penerima' => 3,
+                'judul_kampanye' => 'Darurat Banjir Desa',
+                'deskripsi' => 'Bantuan korban banjir',
+                'target_donasi' => 3000000,
+                'terkumpul' => 0,
+                'foto_sampul' => null,
+                'tanggal_dibuat' => now()->addMinutes(2),
+                'deadline' => now()->addMonth()->toDateString(),
+                'status' => 'aktif',
+            ],
+        ]);
+
+        $this->get('/kampanye?kategori=pendidikan')
+            ->assertOk()
+            ->assertSee('Renovasi Sekolah Desa')
+            ->assertDontSee('Darurat Banjir Desa');
+    }
+
+    public function test_public_campaign_index_is_paginated_to_twenty_five_items(): void
+    {
+        for ($i = 2; $i <= 31; $i++) {
+            DB::table('kampanye_sosial')->insert([
+                'id_kampanye' => $i,
+                'id_pengelola' => 1,
+                'id_penerima' => 1,
+                'judul_kampanye' => "Kampanye Paginasi {$i}",
+                'deskripsi' => 'Deskripsi kampanye untuk tes paginasi',
+                'target_donasi' => 1000000,
+                'terkumpul' => 0,
+                'foto_sampul' => null,
+                'tanggal_dibuat' => now()->addMinutes($i),
+                'deadline' => now()->addMonth()->toDateString(),
+                'status' => 'aktif',
+            ]);
+        }
+
+        $response = $this->get('/kampanye')
+            ->assertOk()
+            ->assertSee('Kampanye Paginasi 31')
+            ->assertSee('Kampanye Paginasi 7')
+            ->assertDontSee('Kampanye Paginasi 6');
+
+        $kampanye = $response->viewData('kampanye');
+
+        $this->assertSame(25, $kampanye->perPage());
+        $this->assertSame(31, $kampanye->total());
+        $this->assertCount(25, $kampanye->items());
+    }
+
     public function test_admin_crud_is_only_accessible_by_admin_utama(): void
     {
         $this->withPengelolaSession('pengelola')

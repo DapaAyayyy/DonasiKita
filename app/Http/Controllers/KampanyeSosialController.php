@@ -6,6 +6,7 @@ use App\Models\Donatur;
 use App\Models\Feedback;
 use App\Models\KampanyeSosial;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class KampanyeSosialController extends Controller
 {
@@ -31,14 +32,9 @@ class KampanyeSosialController extends Controller
     {
         $kategori = strtolower((string) $request->query('kategori', ''));
         $search = trim((string) $request->query('q', ''));
+        $perPage = 25;
 
         $query = KampanyeSosial::with('penerima');
-
-        if ($kategori !== '') {
-            $query->whereHas('penerima', function ($penerimaQuery) use ($kategori) {
-                $penerimaQuery->whereRaw('LOWER(kategori_penerima) = ?', [$kategori]);
-            });
-        }
 
         if ($search !== '') {
             $query->where(function ($kampanyeQuery) use ($search) {
@@ -50,7 +46,28 @@ class KampanyeSosialController extends Controller
             });
         }
 
-        $kampanye = $query->orderBy('tanggal_dibuat', 'desc')->get();
+        if ($kategori !== '') {
+            $filteredKampanye = $query->orderBy('tanggal_dibuat', 'desc')
+                ->get()
+                ->filter(fn ($item) => $item->kategori_virtual === $kategori)
+                ->values();
+
+            $page = LengthAwarePaginator::resolveCurrentPage();
+            $kampanye = new LengthAwarePaginator(
+                $filteredKampanye->forPage($page, $perPage)->values(),
+                $filteredKampanye->count(),
+                $perPage,
+                $page,
+                [
+                    'path' => $request->url(),
+                    'query' => $request->query(),
+                ]
+            );
+        } else {
+            $kampanye = $query->orderBy('tanggal_dibuat', 'desc')
+                ->paginate($perPage)
+                ->withQueryString();
+        }
 
         return view('kampanye.index', compact('kampanye', 'kategori', 'search'));
     }

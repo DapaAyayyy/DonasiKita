@@ -99,5 +99,11 @@
             </div>
         @endforelse
     </div>
+
+    @if ($kampanye->hasPages())
+        <div class="mt-lg">
+            {{ $kampanye->links() }}
+        </div>
+    @endif
 </div>
 @endsection

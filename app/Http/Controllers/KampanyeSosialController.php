@@ -109,7 +109,21 @@ class KampanyeSosialController extends Controller
             ->orderByDesc('id_feedback')
             ->limit(5)
             ->get();
-
+        $kataKasar = [
+            // Kebun Binatang
+            'anjing', 'anjeng', 'njing', 'asu', 'babi', 'monyet', 'kunyuk', 'celeng', 
+            // Makian Umum & Kasar
+            'bangsat', 'bajingan', 'keparat', 'kampret', 'jancuk', 'jancok', 'cok', 'taik', 'tai', 'sialan', 'brengsek',
+            // Umpatan Kecerdasan
+            'goblok', 'goblog', 'tolol', 'bego', 'idiot', 'dongo', 'dungu', 'pekok',
+            // Kata Tidak Pantas Lainnya
+            'pelacur', 'perek', 'jablay', 'lonte', 'ngentot'
+        ]; 
+        
+        foreach ($feedbacks as $feedback) {
+            // Pastikan 'pesan' ini sesuai dengan nama kolom di database lu
+            $feedback->pesan = str_ireplace($kataKasar, '***', $feedback->pesan);
+        }
         return view('kampanye.show', compact(
             'kampanye',
             'feedbacks',

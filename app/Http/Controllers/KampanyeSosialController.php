@@ -121,19 +121,13 @@ class KampanyeSosialController extends Controller
         ]; 
         
         foreach ($feedbacks as $feedback) {
-            // Pastikan 'pesan' ini sesuai dengan nama kolom di database lu
-            $feedback->pesan = str_ireplace($kataKasar, '***', $feedback->pesan);
-        }
+                    $feedback->komentar = str_ireplace($kataKasar, '***', $feedback->komentar);
+                }
         return view('kampanye.show', compact(
             'kampanye',
             'feedbacks',
             'totalRiwayatDonasi',
             'totalDukungan'
         ));
-    }
-    public function destroyFeedback(\App\Models\Feedback $feedback)
-    {
-        $feedback->delete();
-        return back()->with('success', 'Komentar berhasil dihapus dari peredaran.');
     }
 }

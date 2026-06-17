@@ -131,4 +131,9 @@ class KampanyeSosialController extends Controller
             'totalDukungan'
         ));
     }
+    public function destroyFeedback(\App\Models\Feedback $feedback)
+    {
+        $feedback->delete();
+        return back()->with('success', 'Komentar berhasil dihapus dari peredaran.');
+    }
 }

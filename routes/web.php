@@ -72,3 +72,5 @@ Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leade
 Route::get('/riwayat-donasi', [RiwayatController::class, 'index'])
     ->middleware('donatur')
     ->name('donatur.riwayat');
+
+Route::delete('/pengelola/feedback/{feedback}', [PengelolaKampanyeController::class, 'destroyFeedback'])->name('pengelola.feedback.destroy');

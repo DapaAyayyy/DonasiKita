@@ -167,6 +167,16 @@
                                 <p class="font-body-md text-body-md text-on-surface-variant italic">
                                     "{{ $feedback->komentar }}"
                                 </p>
+                                
+                                @if(session('auth_type') === 'pengelola')
+                                    <form action="{{ route('pengelola.feedback.destroy', $feedback->id_feedback) }}" method="POST" class="mt-2" onsubmit="return confirm('Admin: Yakin mau hapus komentar ini dari peredaran?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-bold hover:underline flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">delete</span> Hapus Komentar
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         @endforeach
                     </div>

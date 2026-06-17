@@ -117,4 +117,9 @@ class PengelolaKampanyeController extends Controller
 
         DB::table('kampanye_sosial')->where('id_kampanye', $idKampanye)->update(['terkumpul' => $total]);
     }
+    public function destroyFeedback(\App\Models\Feedback $feedback)
+    {
+        $feedback->delete();
+        return back()->with('success', 'Komentar berhasil dihapus dari peredaran.');
+    }
 }

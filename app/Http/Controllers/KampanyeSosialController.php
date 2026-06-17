@@ -12,39 +12,40 @@ class KampanyeSosialController extends Controller
 {
     // Method untuk Landing Page (Route: /)
     public function home()
-    {
-        $kampanyes = KampanyeSosial::with('penerima')
-            ->orderBy('id_kampanye', 'desc')
-            ->take(6)
-            ->get();
-
-        // 2. Ambil data statistik untuk angka di bagian atas halaman
-        $totalKampanye = KampanyeSosial::count();
-        $totalDana = KampanyeSosial::sum('terkumpul');
-        $totalDonatur = Donatur::count(); // Pastikan Anda sudah meng-import model Donatur di atas file controller
-
-        // 3. Lempar variabel ke view 'index'
-        return view('index', compact('kampanyes', 'totalKampanye', 'totalDana', 'totalDonatur'));
-    }
+        {
+            // TAMBAHAN: Filter cuma nampilin yang 'aktif'
+            $kampanyes = KampanyeSosial::with('penerima')
+                ->where('status', 'aktif') 
+                ->orderBy('id_kampanye', 'desc')
+                ->take(6)
+                ->get();
+    
+            $totalKampanye = KampanyeSosial::count();
+            $totalDana = KampanyeSosial::sum('terkumpul');
+            $totalDonatur = Donatur::count();
+    
+            return view('index', compact('kampanyes', 'totalKampanye', 'totalDana', 'totalDonatur'));
+        }
 
     // Method untuk Daftar Kampanye (Route: /kampanye)
     public function index(Request $request)
-    {
-        $kategori = strtolower((string) $request->query('kategori', ''));
-        $search = trim((string) $request->query('q', ''));
-        $perPage = 25;
-
-        $query = KampanyeSosial::with('penerima');
-
-        if ($search !== '') {
-            $query->where(function ($kampanyeQuery) use ($search) {
-                $kampanyeQuery->where('judul_kampanye', 'like', "%{$search}%")
-                    ->orWhere('deskripsi', 'like', "%{$search}%")
-                    ->orWhereHas('penerima', function ($penerimaQuery) use ($search) {
-                        $penerimaQuery->where('nama', 'like', "%{$search}%");
-                    });
-            });
-        }
+        {
+            $kategori = strtolower((string) $request->query('kategori', ''));
+            $search = trim((string) $request->query('q', ''));
+            $perPage = 25;
+    
+            // TAMBAHAN: Filter awal harus yang 'aktif'
+            $query = KampanyeSosial::with('penerima')->where('status', 'aktif');
+    
+            if ($search !== '') {
+                $query->where(function ($kampanyeQuery) use ($search) {
+                    $kampanyeQuery->where('judul_kampanye', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%")
+                        ->orWhereHas('penerima', function ($penerimaQuery) use ($search) {
+                            $penerimaQuery->where('nama', 'like', "%{$search}%");
+                        });
+                });
+            }
 
         if ($kategori !== '') {
             $filteredKampanye = $query->orderBy('tanggal_dibuat', 'desc')

@@ -25,10 +25,13 @@ class PengelolaAdminController extends Controller
         return view('pengelola.admin.create', ['admin' => null]);
     }
 
-    public function store(Request $request)
+public function store(Request $request)
     {
         $data = $this->validated($request);
         $data['password_hash'] = Hash::make($data['password']);
+        
+        $data['role'] = 'super_admin';
+        
         unset($data['password']);
         Pengelola::create($data);
 
@@ -52,6 +55,9 @@ class PengelolaAdminController extends Controller
         if (! empty($data['password'])) {
             $data['password_hash'] = Hash::make($data['password']);
         }
+        
+        $data['role'] = 'super_admin';
+        
         unset($data['password']);
         $admin->update($data);
 
@@ -61,7 +67,6 @@ class PengelolaAdminController extends Controller
 
         return redirect()->route('pengelola.admin.index')->with('success', 'Akun pengelola berhasil diperbarui.');
     }
-
     public function destroy(Pengelola $admin)
     {
         if ((int) session('auth_id') === (int) $admin->id_pengelola) {

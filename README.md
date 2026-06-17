@@ -159,12 +159,7 @@ Alur demo minimal yang harus bisa berjalan:
 3. Donatur register/login
 4. Donatur memilih kampanye
 5. Donatur melakukan donasi
-6. Donasi masuk dengan status pending
-7. Admin login
-8. Admin memverifikasi donasi
-9. Dana terkumpul bertambah
-10. Leaderboard berubah
-11. Donatur melihat riwayat donasi
+6. Donasi masuk 
 ```
 
 
@@ -195,13 +190,4 @@ Kelompok 7 — Rekayasa Perangkat Lunak
 
 ---
 
-## Status Project
 
-Project saat ini berada pada tahap awal pengembangan.
-
-Prioritas terdekat:
-
-- Menyambungkan Laravel ke database MySQL
-- Menampilkan data dummy dari database
-- Membuat struktur route dan controller awal
-- Melanjutkan implementasi fitur inti DonasiKita

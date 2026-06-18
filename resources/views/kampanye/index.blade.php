@@ -63,29 +63,40 @@
                 </div>
 
                 <div class="p-md flex flex-col flex-grow">
-                    <h3 class="font-headline-md text-[18px] font-bold text-on-surface mb-xs line-clamp-2">{{ $item->judul_kampanye ?? 'Judul Tidak Tersedia' }}</h3>
-
-                    <div class="flex flex-col gap-xs mb-md">
-                        <p class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
-                            <span class="material-symbols-outlined text-[14px]">person</span>
-                            <span><strong>Penerima:</strong> {{ $item->penerima->nama ?? 'Data tidak tersedia' }}</span>
-                        </p>
-                        <p class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
-                            <span class="material-symbols-outlined text-[14px]">track_changes</span>
-                            <span><strong>Target:</strong> Rp {{ number_format($target, 0, ',', '.') }}</span>
-                        </p>
-                    </div>
-
+                    <!-- 1. Judul Kampanye -->
+                    <h3 class="font-headline-md text-[18px] md:text-[20px] font-bold text-on-surface mb-xs line-clamp-2">
+                        {{ $kampanye->judul_kampanye ?? 'Judul Tidak Tersedia' }}
+                    </h3>
+                
+                    <!-- 2. Nama Penerima (Dari Kode 2) -->
+                    <p class="font-caption text-caption text-on-surface-variant flex items-center gap-xs mb-xs">
+                        <span class="material-symbols-outlined text-[14px]">person</span>
+                        <span><strong>Penerima:</strong> {{ $kampanye->penerima->nama ?? 'Data tidak tersedia' }}</span>
+                    </p>
+                
+                    <!-- 3. Deskripsi Singkat (Dari Kode 1) -->
+                    <p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-2 text-[14px]">
+                        {{ Str::limit($kampanye->deskripsi ?? 'Belum ada deskripsi.', 100) }}
+                    </p>
+                    
+                    <!-- 4. Bagian Bawah: Progress, Target, dan Tombol -->
                     <div class="mt-auto">
                         <div class="flex justify-between items-end mb-xs">
                             <span class="font-label-md text-label-md text-primary">Rp {{ number_format($terkumpul, 0, ',', '.') }}</span>
                             <span class="font-caption text-caption text-on-surface-variant">{{ number_format($progress, 0) }}%</span>
                         </div>
-                        <div class="w-full h-2 bg-surface-container-high rounded-full mb-md overflow-hidden">
-                            <div class="h-full bg-progress-gradient rounded-full" style="width: {{ $progress }}%;"></div>
+                        
+                        <div class="w-full h-2 bg-surface-container-high rounded-full mb-sm overflow-hidden">
+                            <div class="h-full bg-progress-gradient rounded-full" style="width: {{ $progress }}%"></div>
                         </div>
-                        <a href="/kampanye/{{ $item->id_kampanye }}"
-                           class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
+                        
+                        <div class="flex justify-between items-center mb-md">
+                            <div class="flex items-center gap-xs text-outline font-caption text-caption">
+                                <span class="material-symbols-outlined text-[16px]">track_changes</span> Target: Rp {{ number_format($target, 0, ',', '.') }}
+                            </div>
+                        </div>
+                        
+                        <a href="/kampanye/{{ $kampanye->id_kampanye ?? '#' }}" class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-full hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-xs">
                             <span class="material-symbols-outlined fill text-[18px]">favorite</span> Donasi Sekarang
                         </a>
                     </div>

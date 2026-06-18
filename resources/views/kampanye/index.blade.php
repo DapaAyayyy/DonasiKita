@@ -64,6 +64,7 @@
 
                 <div class="p-md flex flex-col flex-grow">
                     <h3 class="font-headline-md text-[18px] font-bold text-on-surface mb-xs line-clamp-2">{{ $item->judul_kampanye ?? 'Judul Tidak Tersedia' }}</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant mb-md line-clamp-2 text-[14px]">{{ Str::limit($item->deskripsi ?? 'Belum ada deskripsi.', 100) }}</p>
 
                     <div class="flex flex-col gap-xs mb-md">
                         <p class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
